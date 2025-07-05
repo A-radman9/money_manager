@@ -157,7 +157,9 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
   }
 
   List<Transaction> _filterTransactions(List<Transaction> transactions) {
-    if (!_isFilterActive) return transactions;
+    if (!_isFilterActive) {
+      return transactions;
+    }
 
     return transactions.where((transaction) {
       final transactionDate = transaction.date;
@@ -289,12 +291,12 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
                       ? transactionState.transactions
                       : <Transaction>[];
 
-                    // Apply filters to transactions
-                    final filteredTransactions = _filterTransactions(allTransactions);
-
                     if (transactionState is TransactionLoading) {
                       return const LoadingWidget();
                     }
+
+                    // Apply filters to transactions
+                    final filteredTransactions = _filterTransactions(allTransactions);
 
                     return Column(
                       children: [
