@@ -97,6 +97,9 @@ class DatabaseHelper {
     if (oldVersion < 2 && newVersion >= 2) {
       // Add name_ar column to categories table
       await db.execute('ALTER TABLE ${AppConstants.categoriesTable} ADD COLUMN name_ar TEXT');
+
+      // Update existing default categories with Arabic names
+      await _updateDefaultCategoriesWithArabicNames(db);
     }
 
     // For any other major changes, recreate the database
@@ -137,6 +140,26 @@ class DatabaseHelper {
         'created_at': now,
         'updated_at': now,
       });
+    }
+  }
+
+  Future<void> _updateDefaultCategoriesWithArabicNames(Database db) async {
+    // Update existing default income categories with Arabic names
+    for (final category in AppConstants.defaultIncomeCategories) {
+      await db.execute('''
+        UPDATE ${AppConstants.categoriesTable}
+        SET name_ar = ?
+        WHERE name = ? AND type = ? AND is_default = 1
+      ''', [category['nameAr'], category['name'], AppConstants.incomeType]);
+    }
+
+    // Update existing default expense categories with Arabic names
+    for (final category in AppConstants.defaultExpenseCategories) {
+      await db.execute('''
+        UPDATE ${AppConstants.categoriesTable}
+        SET name_ar = ?
+        WHERE name = ? AND type = ? AND is_default = 1
+      ''', [category['nameAr'], category['name'], AppConstants.expenseType]);
     }
   }
 
