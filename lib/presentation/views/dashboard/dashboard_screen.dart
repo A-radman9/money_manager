@@ -5,6 +5,7 @@ import '../../view_models/dashboard/dashboard_state.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/loading_and_empty_states.dart';
 import '../../../core/constants/app_constants.dart';
+import '../transaction/add_transaction_screen.dart';
 import 'widgets/balance_overview_card.dart';
 import 'widgets/quick_actions_card.dart';
 import 'widgets/recent_transactions_card.dart';
@@ -203,8 +204,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
       ),
       floatingActionButton: FloatingActionButtonCustom(
-        onPressed: () {
-          // TODO: Navigate to add transaction screen
+        onPressed: () async {
+          final result = await Navigator.of(context).push<bool>(
+            MaterialPageRoute(
+              builder: (context) => const AddTransactionScreen(),
+            ),
+          );
+
+          // Refresh dashboard if transaction was added
+          if (result == true) {
+            _loadDashboardData();
+          }
         },
         icon: Icons.add,
         tooltip: 'Add Transaction',

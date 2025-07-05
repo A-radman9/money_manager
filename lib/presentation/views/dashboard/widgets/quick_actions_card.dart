@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_card.dart';
+import '../../transaction/add_transaction_screen.dart';
 
 class QuickActionsCard extends StatelessWidget {
   const QuickActionsCard({super.key});
@@ -29,7 +30,11 @@ class QuickActionsCard extends StatelessWidget {
                   Icons.add_circle_outline,
                   Colors.green,
                   () {
-                    // TODO: Navigate to add income screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AddTransactionScreen(),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -41,7 +46,11 @@ class QuickActionsCard extends StatelessWidget {
                   Icons.remove_circle_outline,
                   Colors.red,
                   () {
-                    // TODO: Navigate to add expense screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AddTransactionScreen(),
+                      ),
+                    );
                   },
                 ),
               ),
