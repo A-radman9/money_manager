@@ -620,6 +620,18 @@ abstract class AppLocalizations {
   /// **'Daily Trends (Last 7 Days)'**
   String get dailyTrendsLast7Days;
 
+  /// No description provided for @incomeByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Income by Category'**
+  String get incomeByCategory;
+
+  /// No description provided for @noIncomeData.
+  ///
+  /// In en, this message translates to:
+  /// **'No income data'**
+  String get noIncomeData;
+
   /// No description provided for @noExpenseData.
   ///
   /// In en, this message translates to:

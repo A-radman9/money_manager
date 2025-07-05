@@ -443,16 +443,75 @@ class _CategoriesTab extends StatelessWidget {
       }
     }
 
-    // Group transactions by category
-    final categoryData = <String, double>{};
-    final categoryColors = <String, Color>{};
-    final colors = [
-      Colors.blue, Colors.orange, Colors.purple, Colors.teal,
-      Colors.pink, Colors.indigo, Colors.amber, Colors.cyan,
-    ];
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Income by Category Section
+          _CategorySection(
+            title: l10n.incomeByCategory,
+            transactionType: 'income',
+            transactions: transactions,
+            categoryMap: categoryMap,
+            l10n: l10n,
+            emptyMessage: l10n.noIncomeData,
+            colors: const [
+              Colors.green, Colors.teal, Colors.blue, Colors.indigo, Colors.cyan,
+              Colors.lightGreen, Colors.blueGrey, Colors.deepPurple, Colors.lightBlue,
+            ],
+          ),
+
+          const SizedBox(height: 32),
+
+          // Expenses by Category Section
+          _CategorySection(
+            title: l10n.expensesByCategory,
+            transactionType: 'expense',
+            transactions: transactions,
+            categoryMap: categoryMap,
+            l10n: l10n,
+            emptyMessage: l10n.noExpenseData,
+            colors: const [
+              Colors.red, Colors.orange, Colors.pink, Colors.deepOrange, Colors.amber,
+              Colors.purple, Colors.brown, Colors.redAccent, Colors.orangeAccent,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategorySection extends StatelessWidget {
+  final String title;
+  final String transactionType;
+  final List<Transaction> transactions;
+  final Map<String, Category> categoryMap;
+  final AppLocalizations l10n;
+  final String emptyMessage;
+  final List<Color> colors;
+
+  const _CategorySection({
+    required this.title,
+    required this.transactionType,
+    required this.transactions,
+    required this.categoryMap,
+    required this.l10n,
+    required this.emptyMessage,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    // Calculate category data for the specific transaction type
+    final Map<String, double> categoryData = {};
+    final Map<String, Color> categoryColors = {};
 
     for (final transaction in transactions) {
-      if (transaction.type == 'expense') {
+      if (transaction.type == transactionType) {
         final categoryId = transaction.categoryId;
         final category = categoryMap[categoryId];
         final categoryName = category?.getLocalizedName(l10n.localeName) ?? l10n.unknownCategory;
@@ -465,117 +524,114 @@ class _CategoriesTab extends StatelessWidget {
       }
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        if (categoryData.isNotEmpty)
+          SizedBox(
+            height: 300,
+            child: PieChart(
+              PieChartData(
+                sections: categoryData.entries.map((entry) {
+                  final percentage = (entry.value / categoryData.values.reduce((a, b) => a + b)) * 100;
+                  return PieChartSectionData(
+                    value: entry.value,
+                    title: '${percentage.toStringAsFixed(1)}%',
+                    color: categoryColors[entry.key]!,
+                    radius: 80,
+                    titleStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  );
+                }).toList(),
+                sectionsSpace: 2,
+                centerSpaceRadius: 40,
+              ),
+            ),
+          )
+        else
+          Container(
+            height: 300,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: theme.dividerColor),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.category_outlined,
+                    size: 64,
+                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    emptyMessage,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+        const SizedBox(height: 16),
+
+        // Category breakdown list
+        if (categoryData.isNotEmpty) ...[
           Text(
-            l10n.expensesByCategory,
-            style: theme.textTheme.headlineSmall?.copyWith(
+            l10n.categoryBreakdown,
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
-
-          if (categoryData.isNotEmpty)
-            SizedBox(
-              height: 300,
-              child: PieChart(
-                PieChartData(
-                  sections: categoryData.entries.map((entry) {
-                    final percentage = (entry.value / categoryData.values.reduce((a, b) => a + b)) * 100;
-                    return PieChartSectionData(
-                      value: entry.value,
-                      title: '${percentage.toStringAsFixed(1)}%',
-                      color: categoryColors[entry.key]!,
-                      radius: 80,
-                      titleStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    );
-                  }).toList(),
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 40,
+          const SizedBox(height: 12),
+          ...categoryData.entries.map((entry) {
+            final percentage = (entry.value / categoryData.values.reduce((a, b) => a + b)) * 100;
+            return Card(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: categoryColors[entry.key]!,
+                  radius: 12,
                 ),
-              ),
-            )
-          else
-            Container(
-              height: 300,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: theme.dividerColor),
-              ),
-              child: Center(
-                child: Column(
+                title: Text(entry.key),
+                trailing: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Icon(
-                      Icons.category_outlined,
-                      size: 64,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
-                    ),
-                    const SizedBox(height: 16),
                     Text(
-                      l10n.noExpenseData,
+                      '\$${entry.value.toStringAsFixed(2)}',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '${percentage.toStringAsFixed(1)}%',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-
-          const SizedBox(height: 16),
-
-          // Category breakdown list
-          if (categoryData.isNotEmpty) ...[
-            Text(
-              l10n.categoryBreakdown,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...categoryData.entries.map((entry) {
-              final percentage = (entry.value / categoryData.values.reduce((a, b) => a + b)) * 100;
-              return Card(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: categoryColors[entry.key]!,
-                    radius: 12,
-                  ),
-                  title: Text(entry.key), // Now shows the actual category name
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '\$${entry.value.toStringAsFixed(2)}',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '${percentage.toStringAsFixed(1)}%',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          ],
+            );
+          }).toList(),
         ],
-      ),
+      ],
     );
   }
 }

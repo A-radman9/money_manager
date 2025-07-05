@@ -271,6 +271,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dailyTrendsLast7Days => 'الاتجاهات اليومية (آخر 7 أيام)';
 
   @override
+  String get incomeByCategory => 'الدخل حسب الفئة';
+
+  @override
+  String get noIncomeData => 'لا توجد بيانات دخل';
+
+  @override
   String get noExpenseData => 'لا توجد بيانات مصروفات';
 
   @override

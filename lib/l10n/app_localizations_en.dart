@@ -277,6 +277,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dailyTrendsLast7Days => 'Daily Trends (Last 7 Days)';
 
   @override
+  String get incomeByCategory => 'Income by Category';
+
+  @override
+  String get noIncomeData => 'No income data';
+
+  @override
   String get noExpenseData => 'No expense data';
 
   @override
