@@ -596,6 +596,48 @@ abstract class AppLocalizations {
   /// **'Tap the + button to add your first category'**
   String get addFirstCategory;
 
+  /// No description provided for @netBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Balance'**
+  String get netBalance;
+
+  /// No description provided for @noDataToDisplay.
+  ///
+  /// In en, this message translates to:
+  /// **'No data to display'**
+  String get noDataToDisplay;
+
+  /// No description provided for @addTransactionsToSeeCharts.
+  ///
+  /// In en, this message translates to:
+  /// **'Add some transactions to see charts'**
+  String get addTransactionsToSeeCharts;
+
+  /// No description provided for @dailyTrendsLast7Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Trends (Last 7 Days)'**
+  String get dailyTrendsLast7Days;
+
+  /// No description provided for @noExpenseData.
+  ///
+  /// In en, this message translates to:
+  /// **'No expense data'**
+  String get noExpenseData;
+
+  /// No description provided for @categoryBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Breakdown'**
+  String get categoryBreakdown;
+
+  /// No description provided for @unknownCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Category'**
+  String get unknownCategory;
+
   /// No description provided for @deleteCategory.
   ///
   /// In en, this message translates to:

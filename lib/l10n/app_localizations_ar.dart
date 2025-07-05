@@ -258,6 +258,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addFirstCategory => 'اضغط على زر + لإضافة فئتك الأولى';
 
   @override
+  String get netBalance => 'الرصيد الصافي';
+
+  @override
+  String get noDataToDisplay => 'لا توجد بيانات للعرض';
+
+  @override
+  String get addTransactionsToSeeCharts =>
+      'أضف بعض المعاملات لرؤية الرسوم البيانية';
+
+  @override
+  String get dailyTrendsLast7Days => 'الاتجاهات اليومية (آخر 7 أيام)';
+
+  @override
+  String get noExpenseData => 'لا توجد بيانات مصروفات';
+
+  @override
+  String get categoryBreakdown => 'تفصيل الفئات';
+
+  @override
+  String get unknownCategory => 'فئة غير معروفة';
+
+  @override
   String get deleteCategory => 'حذف الفئة';
 
   @override

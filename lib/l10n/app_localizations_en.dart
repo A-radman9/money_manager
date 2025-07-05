@@ -264,6 +264,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addFirstCategory => 'Tap the + button to add your first category';
 
   @override
+  String get netBalance => 'Net Balance';
+
+  @override
+  String get noDataToDisplay => 'No data to display';
+
+  @override
+  String get addTransactionsToSeeCharts =>
+      'Add some transactions to see charts';
+
+  @override
+  String get dailyTrendsLast7Days => 'Daily Trends (Last 7 Days)';
+
+  @override
+  String get noExpenseData => 'No expense data';
+
+  @override
+  String get categoryBreakdown => 'Category Breakdown';
+
+  @override
+  String get unknownCategory => 'Unknown Category';
+
+  @override
   String get deleteCategory => 'Delete Category';
 
   @override

@@ -11,6 +11,7 @@ import '../../widgets/loading_and_empty_states.dart';
 import '../../../domain/entities/transaction.dart';
 import '../../../domain/entities/category.dart';
 import '../../../core/utils/date_utils.dart' as date_utils;
+import '../../../l10n/app_localizations.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -40,10 +41,11 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Financial Reports'),
+        title: Text(l10n.financialReports),
         backgroundColor: theme.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -52,10 +54,10 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
           indicatorColor: Colors.white,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white70,
-          tabs: const [
-            Tab(text: 'Overview', icon: Icon(Icons.pie_chart)),
-            Tab(text: 'Trends', icon: Icon(Icons.trending_up)),
-            Tab(text: 'Categories', icon: Icon(Icons.category)),
+          tabs: [
+            Tab(text: l10n.overview, icon: const Icon(Icons.pie_chart)),
+            Tab(text: l10n.trends, icon: const Icon(Icons.trending_up)),
+            Tab(text: l10n.categories, icon: const Icon(Icons.category)),
           ],
         ),
       ),
@@ -121,11 +123,12 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
                     return TabBarView(
                       controller: _tabController,
                       children: [
-                        _OverviewTab(data: dashboardState.data),
-                        _TrendsTab(transactions: allTransactions),
+                        _OverviewTab(data: dashboardState.data, l10n: l10n),
+                        _TrendsTab(transactions: allTransactions, l10n: l10n),
                         _CategoriesTab(
                           transactions: allTransactions,
                           categories: categories,
+                          l10n: l10n,
                         ),
                       ],
                     );
@@ -144,8 +147,9 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
 
 class _OverviewTab extends StatelessWidget {
   final dynamic data;
-  
-  const _OverviewTab({required this.data});
+  final AppLocalizations l10n;
+
+  const _OverviewTab({required this.data, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +168,7 @@ class _OverviewTab extends StatelessWidget {
             children: [
               Expanded(
                 child: _MetricCard(
-                  title: 'Total Income',
+                  title: l10n.totalIncome,
                   value: '\$${totalIncome.toStringAsFixed(2)}',
                   color: Colors.green,
                   icon: Icons.arrow_downward,
@@ -173,7 +177,7 @@ class _OverviewTab extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _MetricCard(
-                  title: 'Total Expenses',
+                  title: l10n.totalExpenses,
                   value: '\$${totalExpenses.toStringAsFixed(2)}',
                   color: Colors.red,
                   icon: Icons.arrow_upward,
@@ -183,7 +187,7 @@ class _OverviewTab extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           _MetricCard(
-            title: 'Net Balance',
+            title: l10n.netBalance,
             value: '\$${balance.toStringAsFixed(2)}',
             color: balance >= 0 ? Colors.green : Colors.red,
             icon: balance >= 0 ? Icons.trending_up : Icons.trending_down,
@@ -194,7 +198,7 @@ class _OverviewTab extends StatelessWidget {
           
           // Income vs Expenses Pie Chart
           Text(
-            'Income vs Expenses',
+            l10n.incomeVsExpenses,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -209,7 +213,7 @@ class _OverviewTab extends StatelessWidget {
                   sections: [
                     PieChartSectionData(
                       value: totalIncome,
-                      title: 'Income\n\$${totalIncome.toStringAsFixed(0)}',
+                      title: '${l10n.income}\n\$${totalIncome.toStringAsFixed(0)}',
                       color: Colors.green,
                       radius: 100,
                       titleStyle: const TextStyle(
@@ -220,7 +224,7 @@ class _OverviewTab extends StatelessWidget {
                     ),
                     PieChartSectionData(
                       value: totalExpenses,
-                      title: 'Expenses\n\$${totalExpenses.toStringAsFixed(0)}',
+                      title: '${l10n.expense}\n\$${totalExpenses.toStringAsFixed(0)}',
                       color: Colors.red,
                       radius: 100,
                       titleStyle: const TextStyle(
@@ -254,14 +258,14 @@ class _OverviewTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'No data to display',
+                      l10n.noDataToDisplay,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Add some transactions to see charts',
+                      l10n.addTransactionsToSeeCharts,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.5),
                       ),
@@ -278,8 +282,9 @@ class _OverviewTab extends StatelessWidget {
 
 class _TrendsTab extends StatelessWidget {
   final List<Transaction> transactions;
+  final AppLocalizations l10n;
 
-  const _TrendsTab({required this.transactions});
+  const _TrendsTab({required this.transactions, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -320,7 +325,7 @@ class _TrendsTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Daily Trends (Last 7 Days)',
+            l10n.dailyTrendsLast7Days,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -404,9 +409,9 @@ class _TrendsTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _LegendItem(color: Colors.green, label: 'Income'),
+              _LegendItem(color: Colors.green, label: l10n.income),
               const SizedBox(width: 24),
-              _LegendItem(color: Colors.red, label: 'Expenses'),
+              _LegendItem(color: Colors.red, label: l10n.expense),
             ],
           ),
         ],
@@ -418,10 +423,12 @@ class _TrendsTab extends StatelessWidget {
 class _CategoriesTab extends StatelessWidget {
   final List<Transaction> transactions;
   final List<Category> categories;
+  final AppLocalizations l10n;
 
   const _CategoriesTab({
     required this.transactions,
     required this.categories,
+    required this.l10n,
   });
 
   @override
@@ -448,7 +455,7 @@ class _CategoriesTab extends StatelessWidget {
       if (transaction.type == 'expense') {
         final categoryId = transaction.categoryId;
         final category = categoryMap[categoryId];
-        final categoryName = category?.name ?? 'Unknown Category';
+        final categoryName = category?.getLocalizedName(l10n.localeName) ?? l10n.unknownCategory;
 
         categoryData[categoryName] = (categoryData[categoryName] ?? 0) + transaction.amount;
 
@@ -464,7 +471,7 @@ class _CategoriesTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Expenses by Category',
+            l10n.expensesByCategory,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -514,7 +521,7 @@ class _CategoriesTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'No expense data',
+                      l10n.noExpenseData,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -529,7 +536,7 @@ class _CategoriesTab extends StatelessWidget {
           // Category breakdown list
           if (categoryData.isNotEmpty) ...[
             Text(
-              'Category Breakdown',
+              l10n.categoryBreakdown,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
