@@ -438,4 +438,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pleaseSelectACategory => 'يرجى اختيار فئة';
+
+  @override
+  String get goodMorning => 'صباح الخير';
+
+  @override
+  String get goodAfternoon => 'مساء الخير';
+
+  @override
+  String get goodEvening => 'مساء الخير';
+
+  @override
+  String get financialOverview => 'إليك نظرة عامة على أموالك';
 }

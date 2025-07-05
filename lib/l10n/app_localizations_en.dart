@@ -445,4 +445,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseSelectACategory => 'Please select a category';
+
+  @override
+  String get goodMorning => 'Good morning';
+
+  @override
+  String get goodAfternoon => 'Good afternoon';
+
+  @override
+  String get goodEvening => 'Good evening';
+
+  @override
+  String get financialOverview => 'Here\'s your financial overview';
 }

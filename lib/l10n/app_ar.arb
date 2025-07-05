@@ -164,5 +164,10 @@
   "tryAdjustingSearch": "حاول تعديل مصطلحات البحث",
   "addFirstTransaction": "أضف معاملتك الأولى للبدء",
   "clearSearch": "مسح البحث",
-  "deleteTransactionConfirm": "هل أنت متأكد من حذف هذه المعاملة؟"
+  "deleteTransactionConfirm": "هل أنت متأكد من حذف هذه المعاملة؟",
+
+  "goodMorning": "صباح الخير",
+  "goodAfternoon": "مساء الخير",
+  "goodEvening": "مساء الخير",
+  "financialOverview": "إليك نظرة عامة على أموالك"
 }

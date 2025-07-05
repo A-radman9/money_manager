@@ -99,14 +99,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Good ${_getGreeting()}!',
+                            '${_getGreeting(l10n)}!',
                             style: theme.textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: 4.0),
                           Text(
-                            'Here\'s your financial overview',
+                            l10n.financialOverview,
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: theme.textTheme.bodyLarge?.color?.withOpacity(0.7),
                             ),
@@ -163,14 +163,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Good ${_getGreeting()}!',
+                              '${_getGreeting(l10n)}!',
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             const SizedBox(height: 4.0),
                             Text(
-                              'Here\'s your financial overview',
+                              l10n.financialOverview,
                               style: theme.textTheme.bodyLarge?.copyWith(
                                 color: theme.textTheme.bodyLarge?.color?.withOpacity(0.7),
                               ),
@@ -238,14 +238,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  String _getGreeting() {
+  String _getGreeting(AppLocalizations l10n) {
     final hour = DateTime.now().hour;
     if (hour < 12) {
-      return 'morning';
+      return l10n.goodMorning;
     } else if (hour < 17) {
-      return 'afternoon';
+      return l10n.goodAfternoon;
     } else {
-      return 'evening';
+      return l10n.goodEvening;
     }
   }
 }

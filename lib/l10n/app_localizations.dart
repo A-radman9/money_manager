@@ -955,6 +955,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select a category'**
   String get pleaseSelectACategory;
+
+  /// No description provided for @goodMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get goodMorning;
+
+  /// No description provided for @goodAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get goodAfternoon;
+
+  /// No description provided for @goodEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get goodEvening;
+
+  /// No description provided for @financialOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Here\'s your financial overview'**
+  String get financialOverview;
 }
 
 class _AppLocalizationsDelegate
