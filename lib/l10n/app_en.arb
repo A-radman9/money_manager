@@ -137,5 +137,32 @@
   "today": "Today",
   "yesterday": "Yesterday",
   "startByAddingFirstTransaction": "Start by adding your first transaction",
-  "welcomeToMoneyManager": "Welcome to Money Manager"
+  "welcomeToMoneyManager": "Welcome to Money Manager",
+
+  "filterTransactions": "Filter Transactions",
+  "filterBy": "Filter by",
+  "dateRange": "Date Range",
+  "transactionType": "Transaction Type",
+  "allTypes": "All Types",
+  "allCategories": "All Categories",
+  "amountRange": "Amount Range",
+  "minAmount": "Min Amount",
+  "maxAmount": "Max Amount",
+  "fromDate": "From Date",
+  "toDate": "To Date",
+  "resetFilters": "Reset Filters",
+  "applyFilters": "Apply Filters",
+  "noTransactionsMatchFilter": "No transactions match your filter criteria",
+  "adjustFilters": "Try adjusting your filters",
+  "refresh": "Refresh",
+  "pleaseSelectACategory": "Please select a category",
+
+  "allTransactions": "All Transactions",
+  "searchTransactions": "Search transactions...",
+  "noTransactionsFound": "No transactions found for",
+  "noTransactionsYet": "No transactions yet",
+  "tryAdjustingSearch": "Try adjusting your search terms",
+  "addFirstTransaction": "Add your first transaction to get started",
+  "clearSearch": "Clear Search",
+  "deleteTransactionConfirm": "Are you sure you want to delete this transaction?"
 }

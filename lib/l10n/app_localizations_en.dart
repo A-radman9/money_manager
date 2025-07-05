@@ -87,7 +87,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchTransactions => 'Search transactions...';
 
   @override
-  String get noTransactionsFound => 'No transactions found';
+  String get noTransactionsFound => 'No transactions found for';
 
   @override
   String get noTransactionsYet => 'No transactions yet';
@@ -396,4 +396,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeToMoneyManager => 'Welcome to Money Manager';
+
+  @override
+  String get filterTransactions => 'Filter Transactions';
+
+  @override
+  String get filterBy => 'Filter by';
+
+  @override
+  String get dateRange => 'Date Range';
+
+  @override
+  String get allTypes => 'All Types';
+
+  @override
+  String get allCategories => 'All Categories';
+
+  @override
+  String get amountRange => 'Amount Range';
+
+  @override
+  String get minAmount => 'Min Amount';
+
+  @override
+  String get maxAmount => 'Max Amount';
+
+  @override
+  String get fromDate => 'From Date';
+
+  @override
+  String get toDate => 'To Date';
+
+  @override
+  String get resetFilters => 'Reset Filters';
+
+  @override
+  String get applyFilters => 'Apply Filters';
+
+  @override
+  String get noTransactionsMatchFilter =>
+      'No transactions match your filter criteria';
+
+  @override
+  String get adjustFilters => 'Try adjusting your filters';
+
+  @override
+  String get refresh => 'Refresh';
+
+  @override
+  String get pleaseSelectACategory => 'Please select a category';
 }

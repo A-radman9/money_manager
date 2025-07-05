@@ -61,12 +61,14 @@ class CustomDatePicker extends StatelessWidget {
                   child: Text(
                     selectedDate != null
                         ? date_utils.DateUtils.formatDisplayDate(selectedDate!, Localizations.localeOf(context).languageCode)
-                        : 'Select date',
-                    style: theme.textTheme.bodyLarge?.copyWith(
+                        : label,
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: selectedDate != null
                           ? (enabled ? null : theme.disabledColor)
-                          : theme.textTheme.bodyLarge?.color?.withOpacity(0.5),
+                          : theme.textTheme.bodyMedium?.color?.withOpacity(0.5),
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
                 Icon(
@@ -162,11 +164,13 @@ class DateRangePicker extends StatelessWidget {
                 Expanded(
                   child: Text(
                     _getDateRangeText(context),
-                    style: theme.textTheme.bodyLarge?.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: (startDate != null && endDate != null)
                           ? (enabled ? null : theme.disabledColor)
-                          : theme.textTheme.bodyLarge?.color?.withOpacity(0.5),
+                          : theme.textTheme.bodyMedium?.color?.withOpacity(0.5),
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
                 Icon(

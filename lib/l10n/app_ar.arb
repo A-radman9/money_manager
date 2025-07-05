@@ -137,5 +137,32 @@
   "today": "اليوم",
   "yesterday": "أمس",
   "startByAddingFirstTransaction": "ابدأ بإضافة معاملتك الأولى",
-  "welcomeToMoneyManager": "مرحباً بك في مدير الأموال"
+  "welcomeToMoneyManager": "مرحباً بك في مدير الأموال",
+
+  "filterTransactions": "تصفية المعاملات",
+  "filterBy": "تصفية حسب",
+  "dateRange": "نطاق التاريخ",
+  "transactionType": "نوع المعاملة",
+  "allTypes": "جميع الأنواع",
+  "allCategories": "جميع الفئات",
+  "amountRange": "نطاق المبلغ",
+  "minAmount": "أقل مبلغ",
+  "maxAmount": "أعلى مبلغ",
+  "fromDate": "من تاريخ",
+  "toDate": "إلى تاريخ",
+  "resetFilters": "إعادة تعيين التصفية",
+  "applyFilters": "تطبيق التصفية",
+  "noTransactionsMatchFilter": "لا توجد معاملات تطابق معايير التصفية",
+  "adjustFilters": "حاول تعديل التصفية",
+  "refresh": "تحديث",
+  "pleaseSelectACategory": "يرجى اختيار فئة",
+
+  "allTransactions": "جميع المعاملات",
+  "searchTransactions": "البحث في المعاملات...",
+  "noTransactionsFound": "لم يتم العثور على معاملات لـ",
+  "noTransactionsYet": "لا توجد معاملات بعد",
+  "tryAdjustingSearch": "حاول تعديل مصطلحات البحث",
+  "addFirstTransaction": "أضف معاملتك الأولى للبدء",
+  "clearSearch": "مسح البحث",
+  "deleteTransactionConfirm": "هل أنت متأكد من حذف هذه المعاملة؟"
 }

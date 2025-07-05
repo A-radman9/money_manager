@@ -87,7 +87,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get searchTransactions => 'البحث في المعاملات...';
 
   @override
-  String get noTransactionsFound => 'لم يتم العثور على معاملات';
+  String get noTransactionsFound => 'لم يتم العثور على معاملات لـ';
 
   @override
   String get noTransactionsYet => 'لا توجد معاملات بعد';
@@ -389,4 +389,53 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get welcomeToMoneyManager => 'مرحباً بك في مدير الأموال';
+
+  @override
+  String get filterTransactions => 'تصفية المعاملات';
+
+  @override
+  String get filterBy => 'تصفية حسب';
+
+  @override
+  String get dateRange => 'نطاق التاريخ';
+
+  @override
+  String get allTypes => 'جميع الأنواع';
+
+  @override
+  String get allCategories => 'جميع الفئات';
+
+  @override
+  String get amountRange => 'نطاق المبلغ';
+
+  @override
+  String get minAmount => 'أقل مبلغ';
+
+  @override
+  String get maxAmount => 'أعلى مبلغ';
+
+  @override
+  String get fromDate => 'من تاريخ';
+
+  @override
+  String get toDate => 'إلى تاريخ';
+
+  @override
+  String get resetFilters => 'إعادة تعيين التصفية';
+
+  @override
+  String get applyFilters => 'تطبيق التصفية';
+
+  @override
+  String get noTransactionsMatchFilter =>
+      'لا توجد معاملات تطابق معايير التصفية';
+
+  @override
+  String get adjustFilters => 'حاول تعديل التصفية';
+
+  @override
+  String get refresh => 'تحديث';
+
+  @override
+  String get pleaseSelectACategory => 'يرجى اختيار فئة';
 }
