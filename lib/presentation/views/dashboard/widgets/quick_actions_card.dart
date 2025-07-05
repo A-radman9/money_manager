@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../widgets/custom_card.dart';
 import '../../transaction/add_transaction_screen.dart';
 import '../../reports/reports_screen.dart';
+import '../../category/categories_screen.dart';
 
 class QuickActionsCard extends StatelessWidget {
   final VoidCallback? onTransactionAdded;
@@ -91,7 +92,11 @@ class QuickActionsCard extends StatelessWidget {
                   Icons.category_outlined,
                   Colors.orange,
                   () {
-                    // TODO: Navigate to categories screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CategoriesScreen(),
+                      ),
+                    );
                   },
                 ),
               ),
