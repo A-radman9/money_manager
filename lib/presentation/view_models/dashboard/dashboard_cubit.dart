@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../domain/entities/transaction.dart';
 import '../../../domain/repositories/transaction_repository.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/date_utils.dart' as date_utils;
@@ -62,7 +63,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       // Extract successful results
       final totalIncome = results[0].fold((l) => 0.0, (r) => r as double);
       final totalExpense = results[1].fold((l) => 0.0, (r) => r as double);
-      final allTransactions = results[2].fold((l) => [], (r) => r as List);
+      final allTransactions = results[2].fold((l) => <Transaction>[], (r) => r as List<Transaction>);
       final monthlyIncome = results[3].fold((l) => 0.0, (r) => r as double);
       final monthlyExpense = results[4].fold((l) => 0.0, (r) => r as double);
 
@@ -128,7 +129,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       // Extract successful results
       final monthlyIncome = results[0].fold((l) => 0.0, (r) => r as double);
       final monthlyExpense = results[1].fold((l) => 0.0, (r) => r as double);
-      final monthTransactions = results[2].fold((l) => [], (r) => r as List);
+      final monthTransactions = results[2].fold((l) => <Transaction>[], (r) => r as List<Transaction>);
       final totalIncome = results[3].fold((l) => 0.0, (r) => r as double);
       final totalExpense = results[4].fold((l) => 0.0, (r) => r as double);
 

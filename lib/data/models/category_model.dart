@@ -59,6 +59,7 @@ class CategoryModel extends Category {
     );
   }
 
+  @override
   CategoryModel copyWith({
     String? id,
     String? name,

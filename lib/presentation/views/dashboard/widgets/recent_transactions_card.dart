@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_card.dart';
-import '../../../widgets/loading_and_empty_states.dart';
 import '../../../../domain/entities/transaction.dart';
 import '../../../../core/utils/currency_utils.dart';
 import '../../../../core/utils/date_utils.dart' as date_utils;

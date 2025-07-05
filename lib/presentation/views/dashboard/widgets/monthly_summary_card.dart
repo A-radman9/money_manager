@@ -235,16 +235,16 @@ class MonthlySummaryCard extends StatelessWidget {
         const SizedBox(height: 8.0),
         Row(
           children: [
-            _buildLegendItem('Income', Colors.green, incomePercentage),
+            _buildLegendItem(context, 'Income', Colors.green, incomePercentage),
             const SizedBox(width: 16.0),
-            _buildLegendItem('Expense', Colors.red, 1 - incomePercentage),
+            _buildLegendItem(context, 'Expense', Colors.red, 1 - incomePercentage),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildLegendItem(String label, Color color, double percentage) {
+  Widget _buildLegendItem(BuildContext context, String label, Color color, double percentage) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

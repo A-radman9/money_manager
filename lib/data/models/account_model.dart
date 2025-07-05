@@ -55,6 +55,7 @@ class AccountModel extends Account {
     );
   }
 
+  @override
   AccountModel copyWith({
     String? id,
     String? name,
