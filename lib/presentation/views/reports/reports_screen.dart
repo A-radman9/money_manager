@@ -5,6 +5,8 @@ import '../../view_models/dashboard/dashboard_cubit.dart';
 import '../../view_models/dashboard/dashboard_state.dart';
 import '../../view_models/category/category_cubit.dart';
 import '../../view_models/category/category_state.dart';
+import '../../view_models/transaction/transaction_cubit.dart';
+import '../../view_models/transaction/transaction_state.dart';
 import '../../widgets/loading_and_empty_states.dart';
 import '../../../domain/entities/transaction.dart';
 import '../../../domain/entities/category.dart';
@@ -26,6 +28,7 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
     _tabController = TabController(length: 3, vsync: this);
     context.read<DashboardCubit>().loadDashboardData();
     context.read<CategoryCubit>().loadCategories();
+    context.read<TransactionCubit>().loadTransactions();
   }
 
   @override
@@ -57,12 +60,12 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
         ),
       ),
       body: BlocBuilder<DashboardCubit, DashboardState>(
-        builder: (context, state) {
-          if (state is DashboardLoading) {
+        builder: (context, dashboardState) {
+          if (dashboardState is DashboardLoading) {
             return const LoadingWidget();
           }
-          
-          if (state is DashboardError) {
+
+          if (dashboardState is DashboardError) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +82,7 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    state.message,
+                    dashboardState.message,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.error,
                     ),
@@ -89,6 +92,7 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
                   ElevatedButton(
                     onPressed: () {
                       context.read<DashboardCubit>().loadDashboardData();
+                      context.read<TransactionCubit>().loadTransactions();
                     },
                     child: const Text('Retry'),
                   ),
@@ -96,29 +100,41 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
               ),
             );
           }
-          
-          if (state is DashboardLoaded) {
-            return BlocBuilder<CategoryCubit, CategoryState>(
-              builder: (context, categoryState) {
-                final categories = categoryState is CategoryLoaded
-                  ? categoryState.categories
-                  : <Category>[];
 
-                return TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _OverviewTab(data: state.data),
-                    _TrendsTab(transactions: state.data.recentTransactions),
-                    _CategoriesTab(
-                      transactions: state.data.recentTransactions,
-                      categories: categories,
-                    ),
-                  ],
+          if (dashboardState is DashboardLoaded) {
+            return BlocBuilder<TransactionCubit, TransactionState>(
+              builder: (context, transactionState) {
+                return BlocBuilder<CategoryCubit, CategoryState>(
+                  builder: (context, categoryState) {
+                    final categories = categoryState is CategoryLoaded
+                      ? categoryState.categories
+                      : <Category>[];
+
+                    final allTransactions = transactionState is TransactionLoaded
+                      ? transactionState.transactions
+                      : <Transaction>[];
+
+                    if (transactionState is TransactionLoading) {
+                      return const LoadingWidget();
+                    }
+
+                    return TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _OverviewTab(data: dashboardState.data),
+                        _TrendsTab(transactions: allTransactions),
+                        _CategoriesTab(
+                          transactions: allTransactions,
+                          categories: categories,
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
             );
           }
-          
+
           return const SizedBox.shrink();
         },
       ),
