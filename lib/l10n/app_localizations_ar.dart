@@ -15,7 +15,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dashboard => 'لوحة التحكم';
 
   @override
-  String get transactions => 'المعاملات';
+  String get transactions => 'معاملات';
 
   @override
   String get reports => 'التقارير';
@@ -284,6 +284,60 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unknownCategory => 'فئة غير معروفة';
+
+  @override
+  String get filter => 'تصفية';
+
+  @override
+  String get clearFilter => 'مسح التصفية';
+
+  @override
+  String get filterReports => 'تصفية التقارير';
+
+  @override
+  String get year => 'السنة';
+
+  @override
+  String get month => 'الشهر';
+
+  @override
+  String get apply => 'تطبيق';
+
+  @override
+  String get january => 'يناير';
+
+  @override
+  String get february => 'فبراير';
+
+  @override
+  String get march => 'مارس';
+
+  @override
+  String get april => 'أبريل';
+
+  @override
+  String get may => 'مايو';
+
+  @override
+  String get june => 'يونيو';
+
+  @override
+  String get july => 'يوليو';
+
+  @override
+  String get august => 'أغسطس';
+
+  @override
+  String get september => 'سبتمبر';
+
+  @override
+  String get october => 'أكتوبر';
+
+  @override
+  String get november => 'نوفمبر';
+
+  @override
+  String get december => 'ديسمبر';
 
   @override
   String get deleteCategory => 'حذف الفئة';

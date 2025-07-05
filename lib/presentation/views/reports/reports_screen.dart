@@ -23,6 +23,11 @@ class ReportsScreen extends StatefulWidget {
 class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
+  // Filter state
+  int? _selectedYear;
+  int? _selectedMonth;
+  bool _isFilterActive = false;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +43,158 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
     super.dispose();
   }
 
+  void _showFilterDialog() {
+    final l10n = AppLocalizations.of(context)!;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        int? tempYear = _selectedYear;
+        int? tempMonth = _selectedMonth;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(l10n.filterReports),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Year selection
+                  DropdownButtonFormField<int>(
+                    decoration: InputDecoration(
+                      labelText: l10n.year,
+                      border: const OutlineInputBorder(),
+                    ),
+                    value: tempYear,
+                    items: _getAvailableYears().map((year) {
+                      return DropdownMenuItem(
+                        value: year,
+                        child: Text(year.toString()),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        tempYear = value;
+                        if (value == null) tempMonth = null;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Month selection
+                  DropdownButtonFormField<int>(
+                    decoration: InputDecoration(
+                      labelText: l10n.month,
+                      border: const OutlineInputBorder(),
+                    ),
+                    value: tempMonth,
+                    items: tempYear != null ? _getMonthItems(l10n) : null,
+                    onChanged: tempYear != null ? (value) {
+                      setState(() {
+                        tempMonth = value;
+                      });
+                    } : null,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l10n.cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedYear = tempYear;
+                      _selectedMonth = tempMonth;
+                      _isFilterActive = tempYear != null || tempMonth != null;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(l10n.apply),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _selectedYear = null;
+      _selectedMonth = null;
+      _isFilterActive = false;
+    });
+  }
+
+  List<int> _getAvailableYears() {
+    final currentYear = DateTime.now().year;
+    final years = <int>[];
+
+    // Add current year and previous 5 years
+    for (int i = 0; i < 6; i++) {
+      years.add(currentYear - i);
+    }
+
+    return years;
+  }
+
+  List<DropdownMenuItem<int>> _getMonthItems(AppLocalizations l10n) {
+    final months = [
+      l10n.january, l10n.february, l10n.march, l10n.april,
+      l10n.may, l10n.june, l10n.july, l10n.august,
+      l10n.september, l10n.october, l10n.november, l10n.december,
+    ];
+
+    return List.generate(12, (index) {
+      return DropdownMenuItem(
+        value: index + 1,
+        child: Text(months[index]),
+      );
+    });
+  }
+
+  List<Transaction> _filterTransactions(List<Transaction> transactions) {
+    if (!_isFilterActive) return transactions;
+
+    return transactions.where((transaction) {
+      final transactionDate = transaction.date;
+
+      if (_selectedYear != null && transactionDate.year != _selectedYear) {
+        return false;
+      }
+
+      if (_selectedMonth != null && transactionDate.month != _selectedMonth) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
+
+  String _getFilterText(AppLocalizations l10n) {
+    if (_selectedYear != null && _selectedMonth != null) {
+      final months = [
+        l10n.january, l10n.february, l10n.march, l10n.april,
+        l10n.may, l10n.june, l10n.july, l10n.august,
+        l10n.september, l10n.october, l10n.november, l10n.december,
+      ];
+      return '${months[_selectedMonth! - 1]} $_selectedYear';
+    } else if (_selectedYear != null) {
+      return '${l10n.year}: $_selectedYear';
+    } else if (_selectedMonth != null) {
+      final months = [
+        l10n.january, l10n.february, l10n.march, l10n.april,
+        l10n.may, l10n.june, l10n.july, l10n.august,
+        l10n.september, l10n.october, l10n.november, l10n.december,
+      ];
+      return '${l10n.month}: ${months[_selectedMonth! - 1]}';
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -49,6 +206,22 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
         backgroundColor: theme.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.filter_list,
+              color: _isFilterActive ? Colors.amber : Colors.white,
+            ),
+            onPressed: () => _showFilterDialog(),
+            tooltip: l10n.filter,
+          ),
+          if (_isFilterActive)
+            IconButton(
+              icon: const Icon(Icons.clear, color: Colors.white),
+              onPressed: () => _clearFilters(),
+              tooltip: l10n.clearFilter,
+            ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
@@ -116,19 +289,62 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
                       ? transactionState.transactions
                       : <Transaction>[];
 
+                    // Apply filters to transactions
+                    final filteredTransactions = _filterTransactions(allTransactions);
+
                     if (transactionState is TransactionLoading) {
                       return const LoadingWidget();
                     }
 
-                    return TabBarView(
-                      controller: _tabController,
+                    return Column(
                       children: [
-                        _OverviewTab(data: dashboardState.data, l10n: l10n),
-                        _TrendsTab(transactions: allTransactions, l10n: l10n),
-                        _CategoriesTab(
-                          transactions: allTransactions,
-                          categories: categories,
-                          l10n: l10n,
+                        // Filter indicator
+                        if (_isFilterActive)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.filter_list,
+                                  size: 16,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  _getFilterText(l10n),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '${filteredTransactions.length} ${l10n.transactions}',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                        // Tab content
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              _OverviewTab(transactions: filteredTransactions, l10n: l10n),
+                              _TrendsTab(transactions: filteredTransactions, l10n: l10n),
+                              _CategoriesTab(
+                                transactions: filteredTransactions,
+                                categories: categories,
+                                l10n: l10n,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     );
@@ -146,17 +362,28 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
 }
 
 class _OverviewTab extends StatelessWidget {
-  final dynamic data;
+  final List<Transaction> transactions;
   final AppLocalizations l10n;
 
-  const _OverviewTab({required this.data, required this.l10n});
+  const _OverviewTab({required this.transactions, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final totalIncome = data.totalIncome ?? 0.0;
-    final totalExpenses = data.totalExpense ?? 0.0;
-    final balance = data.balance ?? 0.0;
+
+    // Calculate totals from filtered transactions
+    double totalIncome = 0.0;
+    double totalExpenses = 0.0;
+
+    for (final transaction in transactions) {
+      if (transaction.type == 'income') {
+        totalIncome += transaction.amount;
+      } else if (transaction.type == 'expense') {
+        totalExpenses += transaction.amount;
+      }
+    }
+
+    final balance = totalIncome - totalExpenses;
     
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
