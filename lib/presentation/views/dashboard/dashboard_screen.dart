@@ -6,6 +6,7 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/loading_and_empty_states.dart';
 import '../../../core/constants/app_constants.dart';
 import '../transaction/add_transaction_screen.dart';
+import '../transaction/transactions_screen.dart';
 import 'widgets/balance_overview_card.dart';
 import 'widgets/quick_actions_card.dart';
 import 'widgets/recent_transactions_card.dart';
@@ -112,7 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     BalanceOverviewCard(data: state.data),
                     
                     // Quick Actions
-                    const QuickActionsCard(),
+                    QuickActionsCard(onTransactionAdded: _loadDashboardData),
                     
                     // Monthly Summary
                     MonthlySummaryCard(data: state.data),
@@ -121,7 +122,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     RecentTransactionsCard(
                       transactions: state.data.recentTransactions,
                       onViewAll: () {
-                        // TODO: Navigate to transactions screen
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const TransactionsScreen(),
+                          ),
+                        );
                       },
                     ),
                     
@@ -172,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       BalanceOverviewCard(data: state.previousData!),
                       
                       // Quick Actions
-                      const QuickActionsCard(),
+                      QuickActionsCard(onTransactionAdded: _loadDashboardData),
                       
                       // Monthly Summary
                       MonthlySummaryCard(data: state.previousData!),
@@ -181,7 +186,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       RecentTransactionsCard(
                         transactions: state.previousData!.recentTransactions,
                         onViewAll: () {
-                          // TODO: Navigate to transactions screen
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const TransactionsScreen(),
+                            ),
+                          );
                         },
                       ),
                       

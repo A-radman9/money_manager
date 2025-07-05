@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_card.dart';
 import '../../transaction/add_transaction_screen.dart';
+import '../../reports/reports_screen.dart';
 
 class QuickActionsCard extends StatelessWidget {
-  const QuickActionsCard({super.key});
+  final VoidCallback? onTransactionAdded;
+
+  const QuickActionsCard({super.key, this.onTransactionAdded});
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +32,15 @@ class QuickActionsCard extends StatelessWidget {
                   'Add Income',
                   Icons.add_circle_outline,
                   Colors.green,
-                  () {
-                    Navigator.of(context).push(
+                  () async {
+                    final result = await Navigator.of(context).push<bool>(
                       MaterialPageRoute(
                         builder: (context) => const AddTransactionScreen(),
                       ),
                     );
+                    if (result == true && onTransactionAdded != null) {
+                      onTransactionAdded!();
+                    }
                   },
                 ),
               ),
@@ -45,12 +51,15 @@ class QuickActionsCard extends StatelessWidget {
                   'Add Expense',
                   Icons.remove_circle_outline,
                   Colors.red,
-                  () {
-                    Navigator.of(context).push(
+                  () async {
+                    final result = await Navigator.of(context).push<bool>(
                       MaterialPageRoute(
                         builder: (context) => const AddTransactionScreen(),
                       ),
                     );
+                    if (result == true && onTransactionAdded != null) {
+                      onTransactionAdded!();
+                    }
                   },
                 ),
               ),
@@ -66,7 +75,11 @@ class QuickActionsCard extends StatelessWidget {
                   Icons.bar_chart,
                   theme.primaryColor,
                   () {
-                    // TODO: Navigate to reports screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ReportsScreen(),
+                      ),
+                    );
                   },
                 ),
               ),

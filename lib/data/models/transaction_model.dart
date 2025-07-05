@@ -19,7 +19,7 @@ class TransactionModel extends Transaction {
       id: json['id']?.toString(),
       amount: (json['amount'] as num).toDouble(),
       description: json['description'] as String,
-      categoryId: json['category_id'] as String,
+      categoryId: json['category_id']?.toString() ?? '',
       type: json['type'] as String,
       date: date_utils.DateUtils.parseDate(json['date'] as String),
       notes: json['notes'] as String?,
@@ -46,6 +46,10 @@ class TransactionModel extends Transaction {
     final json = toJson();
     if (id == null) {
       json.remove('id');
+    }
+    // Convert category_id from String to int for database storage
+    if (json['category_id'] != null) {
+      json['category_id'] = int.tryParse(json['category_id'].toString()) ?? 0;
     }
     return json;
   }
