@@ -90,11 +90,19 @@ class MoneyManagerApp extends StatelessWidget {
         ],
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, settingsState) {
+            // Get locale from the current state
+            Locale currentLocale = const Locale('en');
+            if (settingsState is SettingsLoaded) {
+              currentLocale = settingsState.locale;
+            } else if (settingsState is SettingsLanguageChanged) {
+              currentLocale = settingsState.locale;
+            }
+
             return MaterialApp(
               title: AppConstants.appName,
               debugShowCheckedModeBanner: false,
               theme: _buildTheme(settingsState),
-              locale: context.read<SettingsCubit>().currentLocale,
+              locale: currentLocale,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,

@@ -4,6 +4,7 @@ import '../../../../domain/entities/transaction.dart';
 import '../../../../core/utils/currency_utils.dart';
 import '../../../../core/utils/date_utils.dart' as date_utils;
 import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class RecentTransactionsCard extends StatelessWidget {
   final List<Transaction> transactions;
@@ -18,6 +19,7 @@ class RecentTransactionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     
     return CustomCard(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -27,7 +29,7 @@ class RecentTransactionsCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Recent Transactions',
+                l10n.recentTransactions,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -37,7 +39,7 @@ class RecentTransactionsCard extends StatelessWidget {
                 TextButton(
                   onPressed: onViewAll,
                   child: Text(
-                    'View All',
+                    l10n.viewAll,
                     style: TextStyle(
                       color: theme.primaryColor,
                       fontWeight: FontWeight.w600,
@@ -60,7 +62,7 @@ class RecentTransactionsCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   Text(
-                    'No transactions yet',
+                    l10n.noTransactionsYet,
                     style: theme.textTheme.titleMedium?.copyWith(
                       color: theme.textTheme.titleMedium?.color?.withOpacity(0.7),
                     ),

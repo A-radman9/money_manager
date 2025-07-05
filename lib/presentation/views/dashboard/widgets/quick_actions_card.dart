@@ -4,6 +4,7 @@ import '../../transaction/add_transaction_screen.dart';
 import '../../reports/reports_screen.dart';
 import '../../category/categories_screen.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class QuickActionsCard extends StatelessWidget {
   final VoidCallback? onTransactionAdded;
@@ -13,14 +14,15 @@ class QuickActionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+    final l10n = AppLocalizations.of(context)!;
+
     return CustomCard(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Quick Actions',
+            l10n.quickActions,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -31,7 +33,7 @@ class QuickActionsCard extends StatelessWidget {
               Expanded(
                 child: _buildActionButton(
                   context,
-                  'Add Income',
+                  l10n.addIncome,
                   Icons.add_circle_outline,
                   Colors.green,
                   () async {
@@ -52,7 +54,7 @@ class QuickActionsCard extends StatelessWidget {
               Expanded(
                 child: _buildActionButton(
                   context,
-                  'Add Expense',
+                  l10n.addExpense,
                   Icons.remove_circle_outline,
                   Colors.red,
                   () async {
@@ -77,7 +79,7 @@ class QuickActionsCard extends StatelessWidget {
               Expanded(
                 child: _buildActionButton(
                   context,
-                  'View Reports',
+                  l10n.reports,
                   Icons.bar_chart,
                   theme.primaryColor,
                   () {
@@ -93,7 +95,7 @@ class QuickActionsCard extends StatelessWidget {
               Expanded(
                 child: _buildActionButton(
                   context,
-                  'Categories',
+                  l10n.categories,
                   Icons.category_outlined,
                   Colors.orange,
                   () {

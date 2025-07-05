@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../../core/utils/currency_utils.dart';
 import '../../../view_models/dashboard/dashboard_state.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class BalanceOverviewCard extends StatelessWidget {
   final DashboardData data;
@@ -14,6 +15,7 @@ class BalanceOverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     
     return CustomCard(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -23,7 +25,7 @@ class BalanceOverviewCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Total Balance',
+                l10n.totalBalance,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -77,7 +79,7 @@ class BalanceOverviewCard extends StatelessWidget {
               Expanded(
                 child: _buildBalanceItem(
                   context,
-                  'Total Income',
+                  l10n.totalIncome,
                   data.totalIncome,
                   Icons.arrow_upward,
                   Colors.green,
@@ -87,7 +89,7 @@ class BalanceOverviewCard extends StatelessWidget {
               Expanded(
                 child: _buildBalanceItem(
                   context,
-                  'Total Expense',
+                  l10n.totalExpenses,
                   data.totalExpense,
                   Icons.arrow_downward,
                   Colors.red,
