@@ -91,7 +91,7 @@ class SettingsScreen extends StatelessWidget {
                       ListTile(
                         leading: const Icon(Icons.code),
                         title: const Text('Developer'),
-                        subtitle: const Text('Money Manager Team'),
+                        subtitle: const Text('Ameen Radman'),
                         contentPadding: EdgeInsets.zero,
                       ),
                     ],
