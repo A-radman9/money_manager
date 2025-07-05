@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:flutter/foundation.dart';
 import '../../core/constants/app_constants.dart';
 
 class DatabaseHelper {
@@ -99,7 +100,7 @@ class DatabaseHelper {
       await db.execute('ALTER TABLE ${AppConstants.categoriesTable} ADD COLUMN name_ar TEXT');
 
       // Update existing default categories with Arabic names
-      await _updateDefaultCategoriesWithArabicNames(db);
+      await updateDefaultCategoriesWithArabicNames(db);
     }
 
     // For any other major changes, recreate the database
@@ -143,7 +144,8 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> _updateDefaultCategoriesWithArabicNames(Database db) async {
+  @visibleForTesting
+  Future<void> updateDefaultCategoriesWithArabicNames(Database db) async {
     // Update existing default income categories with Arabic names
     for (final category in AppConstants.defaultIncomeCategories) {
       await db.execute('''
