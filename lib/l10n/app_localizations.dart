@@ -793,6 +793,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add any additional notes'**
   String get addAnyAdditionalNotes;
+
+  /// No description provided for @positive.
+  ///
+  /// In en, this message translates to:
+  /// **'Positive'**
+  String get positive;
+
+  /// No description provided for @negative.
+  ///
+  /// In en, this message translates to:
+  /// **'Negative'**
+  String get negative;
+
+  /// No description provided for @surplus.
+  ///
+  /// In en, this message translates to:
+  /// **'Surplus'**
+  String get surplus;
+
+  /// No description provided for @deficit.
+  ///
+  /// In en, this message translates to:
+  /// **'Deficit'**
+  String get deficit;
+
+  /// No description provided for @thisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This Month'**
+  String get thisMonth;
+
+  /// No description provided for @incomeVsExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Income vs Expense'**
+  String get incomeVsExpense;
+
+  /// No description provided for @refreshingDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing dashboard...'**
+  String get refreshingDashboard;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @startByAddingFirstTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start by adding your first transaction'**
+  String get startByAddingFirstTransaction;
+
+  /// No description provided for @welcomeToMoneyManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Money Manager'**
+  String get welcomeToMoneyManager;
 }
 
 class _AppLocalizationsDelegate

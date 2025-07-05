@@ -3,6 +3,7 @@ import '../../../widgets/custom_card.dart';
 import '../../../../core/utils/currency_utils.dart';
 import '../../../../core/utils/date_utils.dart' as date_utils;
 import '../../../view_models/dashboard/dashboard_state.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class MonthlySummaryCard extends StatelessWidget {
   final DashboardData data;
@@ -15,8 +16,9 @@ class MonthlySummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
-    final monthName = date_utils.DateUtils.formatMonthYear(now);
+    final monthName = date_utils.DateUtils.formatMonthYear(now, Localizations.localeOf(context).languageCode);
     
     return CustomCard(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -26,7 +28,7 @@ class MonthlySummaryCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                'This Month ($monthName)',
+                '${l10n.thisMonth} ($monthName)',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -44,7 +46,7 @@ class MonthlySummaryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Text(
-                  data.monthlyBalance >= 0 ? 'Surplus' : 'Deficit',
+                  data.monthlyBalance >= 0 ? l10n.surplus : l10n.deficit,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: data.monthlyBalance >= 0 ? Colors.green : Colors.red,
                     fontWeight: FontWeight.w600,
@@ -78,7 +80,7 @@ class MonthlySummaryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Net Balance',
+                  l10n.netBalance,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
                   ),
@@ -102,7 +104,7 @@ class MonthlySummaryCard extends StatelessWidget {
               Expanded(
                 child: _buildMonthlyItem(
                   context,
-                  'Income',
+                  l10n.income,
                   data.monthlyIncome,
                   Icons.trending_up,
                   Colors.green,
@@ -112,7 +114,7 @@ class MonthlySummaryCard extends StatelessWidget {
               Expanded(
                 child: _buildMonthlyItem(
                   context,
-                  'Expense',
+                  l10n.expense,
                   data.monthlyExpense,
                   Icons.trending_down,
                   Colors.red,
@@ -125,7 +127,7 @@ class MonthlySummaryCard extends StatelessWidget {
           // Progress indicators
           _buildProgressIndicator(
             context,
-            'Income vs Expense',
+            l10n.incomeVsExpense,
             data.monthlyIncome,
             data.monthlyExpense,
           ),
@@ -235,16 +237,19 @@ class MonthlySummaryCard extends StatelessWidget {
         const SizedBox(height: 8.0),
         Row(
           children: [
-            _buildLegendItem(context, 'Income', Colors.green, incomePercentage),
+            _buildLegendItem(context, 'income', Colors.green, incomePercentage),
             const SizedBox(width: 16.0),
-            _buildLegendItem(context, 'Expense', Colors.red, 1 - incomePercentage),
+            _buildLegendItem(context, 'expense', Colors.red, 1 - incomePercentage),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildLegendItem(BuildContext context, String label, Color color, double percentage) {
+  Widget _buildLegendItem(BuildContext context, String labelKey, Color color, double percentage) {
+    final l10n = AppLocalizations.of(context)!;
+    final label = labelKey == 'income' ? l10n.income : l10n.expense;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

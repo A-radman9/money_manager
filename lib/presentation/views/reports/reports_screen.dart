@@ -23,11 +23,6 @@ class ReportsScreen extends StatefulWidget {
 class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
-  // Filter state
-  int? _selectedYear;
-  int? _selectedMonth;
-  bool _isFilterActive = false;
-
   @override
   void initState() {
     super.initState();
@@ -43,159 +38,9 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
     super.dispose();
   }
 
-  void _showFilterDialog() {
-    final l10n = AppLocalizations.of(context)!;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        int? tempYear = _selectedYear;
-        int? tempMonth = _selectedMonth;
 
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text(l10n.filterReports),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Year selection
-                  DropdownButtonFormField<int>(
-                    decoration: InputDecoration(
-                      labelText: l10n.year,
-                      border: const OutlineInputBorder(),
-                    ),
-                    value: tempYear,
-                    items: _getAvailableYears().map((year) {
-                      return DropdownMenuItem(
-                        value: year,
-                        child: Text(year.toString()),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        tempYear = value;
-                        if (value == null) tempMonth = null;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
 
-                  // Month selection
-                  DropdownButtonFormField<int>(
-                    decoration: InputDecoration(
-                      labelText: l10n.month,
-                      border: const OutlineInputBorder(),
-                    ),
-                    value: tempMonth,
-                    items: tempYear != null ? _getMonthItems(l10n) : null,
-                    onChanged: tempYear != null ? (value) {
-                      setState(() {
-                        tempMonth = value;
-                      });
-                    } : null,
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(l10n.cancel),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    setState(() {
-                      _selectedYear = tempYear;
-                      _selectedMonth = tempMonth;
-                      _isFilterActive = tempYear != null || tempMonth != null;
-                    });
-                  },
-                  child: Text(l10n.apply),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void _clearFilters() {
-    setState(() {
-      _selectedYear = null;
-      _selectedMonth = null;
-      _isFilterActive = false;
-    });
-  }
-
-  List<int> _getAvailableYears() {
-    final currentYear = DateTime.now().year;
-    final years = <int>[];
-
-    // Add current year and previous 5 years
-    for (int i = 0; i < 6; i++) {
-      years.add(currentYear - i);
-    }
-
-    return years;
-  }
-
-  List<DropdownMenuItem<int>> _getMonthItems(AppLocalizations l10n) {
-    final months = [
-      l10n.january, l10n.february, l10n.march, l10n.april,
-      l10n.may, l10n.june, l10n.july, l10n.august,
-      l10n.september, l10n.october, l10n.november, l10n.december,
-    ];
-
-    return List.generate(12, (index) {
-      return DropdownMenuItem(
-        value: index + 1,
-        child: Text(months[index]),
-      );
-    });
-  }
-
-  List<Transaction> _filterTransactions(List<Transaction> transactions) {
-    if (!_isFilterActive) {
-      return transactions;
-    }
-
-    return transactions.where((transaction) {
-      final transactionDate = transaction.date;
-
-      if (_selectedYear != null && transactionDate.year != _selectedYear) {
-        return false;
-      }
-
-      if (_selectedMonth != null && transactionDate.month != _selectedMonth) {
-        return false;
-      }
-
-      return true;
-    }).toList();
-  }
-
-  String _getFilterText(AppLocalizations l10n) {
-    if (_selectedYear != null && _selectedMonth != null) {
-      final months = [
-        l10n.january, l10n.february, l10n.march, l10n.april,
-        l10n.may, l10n.june, l10n.july, l10n.august,
-        l10n.september, l10n.october, l10n.november, l10n.december,
-      ];
-      return '${months[_selectedMonth! - 1]} $_selectedYear';
-    } else if (_selectedYear != null) {
-      return '${l10n.year}: $_selectedYear';
-    } else if (_selectedMonth != null) {
-      final months = [
-        l10n.january, l10n.february, l10n.march, l10n.april,
-        l10n.may, l10n.june, l10n.july, l10n.august,
-        l10n.september, l10n.october, l10n.november, l10n.december,
-      ];
-      return '${l10n.month}: ${months[_selectedMonth! - 1]}';
-    }
-    return '';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,22 +53,6 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
         backgroundColor: theme.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.filter_list,
-              color: _isFilterActive ? Colors.amber : Colors.white,
-            ),
-            onPressed: () => _showFilterDialog(),
-            tooltip: l10n.filter,
-          ),
-          if (_isFilterActive)
-            IconButton(
-              icon: const Icon(Icons.clear, color: Colors.white),
-              onPressed: () => _clearFilters(),
-              tooltip: l10n.clearFilter,
-            ),
-        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
@@ -295,53 +124,18 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
                       return const LoadingWidget();
                     }
 
-                    // Apply filters to transactions
-                    final filteredTransactions = _filterTransactions(allTransactions);
-
                     return Column(
                       children: [
-                        // Filter indicator
-                        if (_isFilterActive)
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.filter_list,
-                                  size: 16,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  _getFilterText(l10n),
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '${filteredTransactions.length} ${l10n.transactions}',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
 
                         // Tab content
                         Expanded(
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                              _OverviewTab(transactions: filteredTransactions, l10n: l10n),
-                              _TrendsTab(transactions: filteredTransactions, l10n: l10n),
+                              _OverviewTab(transactions: allTransactions, l10n: l10n),
+                              _TrendsTab(transactions: allTransactions, l10n: l10n),
                               _CategoriesTab(
-                                transactions: filteredTransactions,
+                                transactions: allTransactions,
                                 categories: categories,
                                 l10n: l10n,
                               ),
@@ -363,15 +157,45 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
   }
 }
 
-class _OverviewTab extends StatelessWidget {
+class _OverviewTab extends StatefulWidget {
   final List<Transaction> transactions;
   final AppLocalizations l10n;
 
   const _OverviewTab({required this.transactions, required this.l10n});
 
   @override
+  State<_OverviewTab> createState() => _OverviewTabState();
+}
+
+class _OverviewTabState extends State<_OverviewTab> {
+  int? _selectedYear;
+  int? _selectedMonth;
+  bool _isFilterActive = false;
+
+  List<Transaction> get _filteredTransactions {
+    if (!_isFilterActive) {
+      return widget.transactions;
+    }
+
+    return widget.transactions.where((transaction) {
+      final transactionDate = transaction.date;
+
+      if (_selectedYear != null && transactionDate.year != _selectedYear) {
+        return false;
+      }
+
+      if (_selectedMonth != null && transactionDate.month != _selectedMonth) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final transactions = _filteredTransactions;
 
     // Calculate totals from filtered transactions
     double totalIncome = 0.0;
@@ -392,12 +216,15 @@ class _OverviewTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Filter Section
+          _buildFilterSection(),
+          const SizedBox(height: 16),
           // Balance Overview Cards
           Row(
             children: [
               Expanded(
                 child: _MetricCard(
-                  title: l10n.totalIncome,
+                  title: widget.l10n.totalIncome,
                   value: '\$${totalIncome.toStringAsFixed(2)}',
                   color: Colors.green,
                   icon: Icons.arrow_downward,
@@ -406,7 +233,7 @@ class _OverviewTab extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _MetricCard(
-                  title: l10n.totalExpenses,
+                  title: widget.l10n.totalExpenses,
                   value: '\$${totalExpenses.toStringAsFixed(2)}',
                   color: Colors.red,
                   icon: Icons.arrow_upward,
@@ -416,7 +243,7 @@ class _OverviewTab extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           _MetricCard(
-            title: l10n.netBalance,
+            title: widget.l10n.netBalance,
             value: '\$${balance.toStringAsFixed(2)}',
             color: balance >= 0 ? Colors.green : Colors.red,
             icon: balance >= 0 ? Icons.trending_up : Icons.trending_down,
@@ -427,7 +254,7 @@ class _OverviewTab extends StatelessWidget {
           
           // Income vs Expenses Pie Chart
           Text(
-            l10n.incomeVsExpenses,
+            widget.l10n.incomeVsExpenses,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -442,7 +269,7 @@ class _OverviewTab extends StatelessWidget {
                   sections: [
                     PieChartSectionData(
                       value: totalIncome,
-                      title: '${l10n.income}\n\$${totalIncome.toStringAsFixed(0)}',
+                      title: '${widget.l10n.income}\n\$${totalIncome.toStringAsFixed(0)}',
                       color: Colors.green,
                       radius: 100,
                       titleStyle: const TextStyle(
@@ -453,7 +280,7 @@ class _OverviewTab extends StatelessWidget {
                     ),
                     PieChartSectionData(
                       value: totalExpenses,
-                      title: '${l10n.expense}\n\$${totalExpenses.toStringAsFixed(0)}',
+                      title: '${widget.l10n.expense}\n\$${totalExpenses.toStringAsFixed(0)}',
                       color: Colors.red,
                       radius: 100,
                       titleStyle: const TextStyle(
@@ -487,14 +314,14 @@ class _OverviewTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      l10n.noDataToDisplay,
+                      widget.l10n.noDataToDisplay,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n.addTransactionsToSeeCharts,
+                      widget.l10n.addTransactionsToSeeCharts,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.5),
                       ),
@@ -506,6 +333,359 @@ class _OverviewTab extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildFilterSection() {
+    final theme = Theme.of(context);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            theme.primaryColor.withOpacity(0.1),
+            theme.primaryColor.withOpacity(0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.primaryColor.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header Row
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.tune,
+                    size: 20,
+                    color: theme.primaryColor,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.l10n.filter,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                      if (_isFilterActive)
+                        Text(
+                          _getFilterDescription(),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.primaryColor.withOpacity(0.7),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                if (_isFilterActive)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: IconButton(
+                      onPressed: _clearFilters,
+                      icon: const Icon(Icons.clear, size: 18),
+                      color: Colors.red,
+                      tooltip: widget.l10n.clearFilter,
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Filter Controls
+            Column(
+              children: [
+                // Year Picker
+                _buildYearPicker(
+                  label: widget.l10n.year,
+                  value: _selectedYear,
+                  onChanged: (year) {
+                    setState(() {
+                      _selectedYear = year;
+                      if (_selectedYear == null) _selectedMonth = null;
+                      _isFilterActive = _selectedYear != null || _selectedMonth != null;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                // Month Picker
+                _buildFilterDropdown(
+                  label: widget.l10n.month,
+                  value: _selectedMonth?.toString(),
+                  icon: Icons.event,
+                  items: _selectedYear != null ? _getMonthItems().map((item) =>
+                    DropdownMenuItem(
+                      value: item.value.toString(),
+                      child: item.child!,
+                    )
+                  ).toList() : [],
+                  onChanged: _selectedYear != null ? (value) {
+                    setState(() {
+                      _selectedMonth = value != null ? int.parse(value) : null;
+                      _isFilterActive = _selectedYear != null || _selectedMonth != null;
+                    });
+                  } : null,
+                  enabled: _selectedYear != null,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterDropdown({
+    required String label,
+    required String? value,
+    required IconData icon,
+    required List<DropdownMenuItem<String>> items,
+    required void Function(String?)? onChanged,
+    bool enabled = true,
+  }) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: enabled ? Colors.white : Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: enabled
+            ? (value != null ? theme.primaryColor : Colors.grey.shade300)
+            : Colors.grey.shade300,
+          width: enabled && value != null ? 2 : 1,
+        ),
+        boxShadow: enabled ? [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ] : null,
+      ),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(
+            icon,
+            size: 16,
+            color: enabled
+              ? (value != null ? theme.primaryColor : Colors.grey.shade600)
+              : Colors.grey.shade400,
+          ),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          labelStyle: TextStyle(
+            color: enabled
+              ? (value != null ? theme.primaryColor : Colors.grey.shade600)
+              : Colors.grey.shade400,
+            fontSize: 12,
+            fontWeight: value != null ? FontWeight.w500 : FontWeight.normal,
+          ),
+          isDense: true,
+        ),
+        value: value,
+        items: items,
+        onChanged: enabled ? onChanged : null,
+        dropdownColor: Colors.white,
+        style: TextStyle(
+          color: enabled ? Colors.black87 : Colors.grey.shade500,
+          fontSize: 13,
+        ),
+        icon: Icon(
+          Icons.keyboard_arrow_down,
+          size: 16,
+          color: enabled ? theme.primaryColor : Colors.grey.shade400,
+        ),
+        isExpanded: true,
+      ),
+    );
+  }
+
+  String _getFilterDescription() {
+    if (_selectedYear != null && _selectedMonth != null) {
+      final months = [
+        widget.l10n.january, widget.l10n.february, widget.l10n.march, widget.l10n.april,
+        widget.l10n.may, widget.l10n.june, widget.l10n.july, widget.l10n.august,
+        widget.l10n.september, widget.l10n.october, widget.l10n.november, widget.l10n.december,
+      ];
+      return '${months[_selectedMonth! - 1]} $_selectedYear';
+    } else if (_selectedYear != null) {
+      return '${widget.l10n.year} $_selectedYear';
+    } else if (_selectedMonth != null) {
+      final months = [
+        widget.l10n.january, widget.l10n.february, widget.l10n.march, widget.l10n.april,
+        widget.l10n.may, widget.l10n.june, widget.l10n.july, widget.l10n.august,
+        widget.l10n.september, widget.l10n.october, widget.l10n.november, widget.l10n.december,
+      ];
+      return '${widget.l10n.month}: ${months[_selectedMonth! - 1]}';
+    }
+    return '';
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _selectedYear = null;
+      _selectedMonth = null;
+      _isFilterActive = false;
+    });
+  }
+
+  Widget _buildYearPicker({
+    required String label,
+    required int? value,
+    required void Function(int?) onChanged,
+  }) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: value != null ? theme.primaryColor : Colors.grey.shade300,
+          width: value != null ? 2 : 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => _showYearPicker(value, onChanged),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Row(
+            children: [
+              Icon(
+                Icons.calendar_today,
+                size: 18,
+                color: value != null ? theme.primaryColor : Colors.grey.shade600,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(
+                        color: value != null ? theme.primaryColor : Colors.grey.shade600,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      value?.toString() ?? 'Select year',
+                      style: TextStyle(
+                        color: value != null ? Colors.black87 : Colors.grey.shade500,
+                        fontSize: 16,
+                        fontWeight: value != null ? FontWeight.w500 : FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_down,
+                color: value != null ? theme.primaryColor : Colors.grey.shade400,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showYearPicker(int? currentYear, void Function(int?) onChanged) {
+    final theme = Theme.of(context);
+    final now = DateTime.now();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(widget.l10n.year),
+          content: SizedBox(
+            width: 300,
+            height: 300,
+            child: YearPicker(
+              firstDate: DateTime(1900), // No lower limit
+              lastDate: DateTime(2200),   // No upper limit
+              selectedDate: currentYear != null ? DateTime(currentYear) : now,
+              onChanged: (DateTime dateTime) {
+                onChanged(dateTime.year);
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(widget.l10n.cancel),
+            ),
+            if (currentYear != null)
+              TextButton(
+                onPressed: () {
+                  onChanged(null);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  widget.l10n.clearFilter,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<DropdownMenuItem<int>> _getMonthItems() {
+    final months = [
+      widget.l10n.january, widget.l10n.february, widget.l10n.march, widget.l10n.april,
+      widget.l10n.may, widget.l10n.june, widget.l10n.july, widget.l10n.august,
+      widget.l10n.september, widget.l10n.october, widget.l10n.november, widget.l10n.december,
+    ];
+
+    return List.generate(12, (index) {
+      return DropdownMenuItem(
+        value: index + 1,
+        child: Text(months[index]),
+      );
+    });
   }
 }
 
@@ -649,7 +829,7 @@ class _TrendsTab extends StatelessWidget {
   }
 }
 
-class _CategoriesTab extends StatelessWidget {
+class _CategoriesTab extends StatefulWidget {
   final List<Transaction> transactions;
   final List<Category> categories;
   final AppLocalizations l10n;
@@ -661,12 +841,42 @@ class _CategoriesTab extends StatelessWidget {
   });
 
   @override
+  State<_CategoriesTab> createState() => _CategoriesTabState();
+}
+
+class _CategoriesTabState extends State<_CategoriesTab> {
+  int? _selectedYear;
+  int? _selectedMonth;
+  bool _isFilterActive = false;
+
+  List<Transaction> get _filteredTransactions {
+    if (!_isFilterActive) {
+      return widget.transactions;
+    }
+
+    return widget.transactions.where((transaction) {
+      final transactionDate = transaction.date;
+
+      if (_selectedYear != null && transactionDate.year != _selectedYear) {
+        return false;
+      }
+
+      if (_selectedMonth != null && transactionDate.month != _selectedMonth) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final transactions = _filteredTransactions;
 
     // Create category lookup map
     final categoryMap = <String, Category>{};
-    for (final category in categories) {
+    for (final category in widget.categories) {
       if (category.id != null) {
         categoryMap[category.id!] = category;
       }
@@ -677,14 +887,17 @@ class _CategoriesTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Filter Section
+          _buildFilterSection(),
+          const SizedBox(height: 16),
           // Income by Category Section
           _CategorySection(
-            title: l10n.incomeByCategory,
+            title: widget.l10n.incomeByCategory,
             transactionType: 'income',
             transactions: transactions,
             categoryMap: categoryMap,
-            l10n: l10n,
-            emptyMessage: l10n.noIncomeData,
+            l10n: widget.l10n,
+            emptyMessage: widget.l10n.noIncomeData,
             colors: const [
               Colors.green, Colors.teal, Colors.blue, Colors.indigo, Colors.cyan,
               Colors.lightGreen, Colors.blueGrey, Colors.deepPurple, Colors.lightBlue,
@@ -695,12 +908,12 @@ class _CategoriesTab extends StatelessWidget {
 
           // Expenses by Category Section
           _CategorySection(
-            title: l10n.expensesByCategory,
+            title: widget.l10n.expensesByCategory,
             transactionType: 'expense',
             transactions: transactions,
             categoryMap: categoryMap,
-            l10n: l10n,
-            emptyMessage: l10n.noExpenseData,
+            l10n: widget.l10n,
+            emptyMessage: widget.l10n.noExpenseData,
             colors: const [
               Colors.red, Colors.orange, Colors.pink, Colors.deepOrange, Colors.amber,
               Colors.purple, Colors.brown, Colors.redAccent, Colors.orangeAccent,
@@ -709,6 +922,359 @@ class _CategoriesTab extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildFilterSection() {
+    final theme = Theme.of(context);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            theme.primaryColor.withOpacity(0.1),
+            theme.primaryColor.withOpacity(0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.primaryColor.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header Row
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.tune,
+                    size: 20,
+                    color: theme.primaryColor,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.l10n.filter,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                      if (_isFilterActive)
+                        Text(
+                          _getFilterDescription(),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.primaryColor.withOpacity(0.7),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                if (_isFilterActive)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: IconButton(
+                      onPressed: _clearFilters,
+                      icon: const Icon(Icons.clear, size: 18),
+                      color: Colors.red,
+                      tooltip: widget.l10n.clearFilter,
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Filter Controls
+            Column(
+              children: [
+                // Year Picker
+                _buildYearPicker(
+                  label: widget.l10n.year,
+                  value: _selectedYear,
+                  onChanged: (year) {
+                    setState(() {
+                      _selectedYear = year;
+                      if (_selectedYear == null) _selectedMonth = null;
+                      _isFilterActive = _selectedYear != null || _selectedMonth != null;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                // Month Picker
+                _buildFilterDropdown(
+                  label: widget.l10n.month,
+                  value: _selectedMonth?.toString(),
+                  icon: Icons.event,
+                  items: _selectedYear != null ? _getMonthItems().map((item) =>
+                    DropdownMenuItem(
+                      value: item.value.toString(),
+                      child: item.child!,
+                    )
+                  ).toList() : [],
+                  onChanged: _selectedYear != null ? (value) {
+                    setState(() {
+                      _selectedMonth = value != null ? int.parse(value) : null;
+                      _isFilterActive = _selectedYear != null || _selectedMonth != null;
+                    });
+                  } : null,
+                  enabled: _selectedYear != null,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterDropdown({
+    required String label,
+    required String? value,
+    required IconData icon,
+    required List<DropdownMenuItem<String>> items,
+    required void Function(String?)? onChanged,
+    bool enabled = true,
+  }) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: enabled ? Colors.white : Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: enabled
+            ? (value != null ? theme.primaryColor : Colors.grey.shade300)
+            : Colors.grey.shade300,
+          width: enabled && value != null ? 2 : 1,
+        ),
+        boxShadow: enabled ? [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ] : null,
+      ),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(
+            icon,
+            size: 16,
+            color: enabled
+              ? (value != null ? theme.primaryColor : Colors.grey.shade600)
+              : Colors.grey.shade400,
+          ),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          labelStyle: TextStyle(
+            color: enabled
+              ? (value != null ? theme.primaryColor : Colors.grey.shade600)
+              : Colors.grey.shade400,
+            fontSize: 12,
+            fontWeight: value != null ? FontWeight.w500 : FontWeight.normal,
+          ),
+          isDense: true,
+        ),
+        value: value,
+        items: items,
+        onChanged: enabled ? onChanged : null,
+        dropdownColor: Colors.white,
+        style: TextStyle(
+          color: enabled ? Colors.black87 : Colors.grey.shade500,
+          fontSize: 13,
+        ),
+        icon: Icon(
+          Icons.keyboard_arrow_down,
+          size: 16,
+          color: enabled ? theme.primaryColor : Colors.grey.shade400,
+        ),
+        isExpanded: true,
+      ),
+    );
+  }
+
+  String _getFilterDescription() {
+    if (_selectedYear != null && _selectedMonth != null) {
+      final months = [
+        widget.l10n.january, widget.l10n.february, widget.l10n.march, widget.l10n.april,
+        widget.l10n.may, widget.l10n.june, widget.l10n.july, widget.l10n.august,
+        widget.l10n.september, widget.l10n.october, widget.l10n.november, widget.l10n.december,
+      ];
+      return '${months[_selectedMonth! - 1]} $_selectedYear';
+    } else if (_selectedYear != null) {
+      return '${widget.l10n.year} $_selectedYear';
+    } else if (_selectedMonth != null) {
+      final months = [
+        widget.l10n.january, widget.l10n.february, widget.l10n.march, widget.l10n.april,
+        widget.l10n.may, widget.l10n.june, widget.l10n.july, widget.l10n.august,
+        widget.l10n.september, widget.l10n.october, widget.l10n.november, widget.l10n.december,
+      ];
+      return '${widget.l10n.month}: ${months[_selectedMonth! - 1]}';
+    }
+    return '';
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _selectedYear = null;
+      _selectedMonth = null;
+      _isFilterActive = false;
+    });
+  }
+
+  Widget _buildYearPicker({
+    required String label,
+    required int? value,
+    required void Function(int?) onChanged,
+  }) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: value != null ? theme.primaryColor : Colors.grey.shade300,
+          width: value != null ? 2 : 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => _showYearPicker(value, onChanged),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Row(
+            children: [
+              Icon(
+                Icons.calendar_today,
+                size: 18,
+                color: value != null ? theme.primaryColor : Colors.grey.shade600,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(
+                        color: value != null ? theme.primaryColor : Colors.grey.shade600,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      value?.toString() ?? 'Select year',
+                      style: TextStyle(
+                        color: value != null ? Colors.black87 : Colors.grey.shade500,
+                        fontSize: 16,
+                        fontWeight: value != null ? FontWeight.w500 : FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_down,
+                color: value != null ? theme.primaryColor : Colors.grey.shade400,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showYearPicker(int? currentYear, void Function(int?) onChanged) {
+    final theme = Theme.of(context);
+    final now = DateTime.now();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(widget.l10n.year),
+          content: SizedBox(
+            width: 300,
+            height: 300,
+            child: YearPicker(
+              firstDate: DateTime(1900), // No lower limit
+              lastDate: DateTime(2200),   // No upper limit
+              selectedDate: currentYear != null ? DateTime(currentYear) : now,
+              onChanged: (DateTime dateTime) {
+                onChanged(dateTime.year);
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(widget.l10n.cancel),
+            ),
+            if (currentYear != null)
+              TextButton(
+                onPressed: () {
+                  onChanged(null);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  widget.l10n.clearFilter,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<DropdownMenuItem<int>> _getMonthItems() {
+    final months = [
+      widget.l10n.january, widget.l10n.february, widget.l10n.march, widget.l10n.april,
+      widget.l10n.may, widget.l10n.june, widget.l10n.july, widget.l10n.august,
+      widget.l10n.september, widget.l10n.october, widget.l10n.november, widget.l10n.december,
+    ];
+
+    return List.generate(12, (index) {
+      return DropdownMenuItem(
+        value: index + 1,
+        child: Text(months[index]),
+      );
+    });
   }
 }
 

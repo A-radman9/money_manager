@@ -356,4 +356,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addAnyAdditionalNotes => 'أضف أي ملاحظات إضافية';
+
+  @override
+  String get positive => 'إيجابي';
+
+  @override
+  String get negative => 'سلبي';
+
+  @override
+  String get surplus => 'فائض';
+
+  @override
+  String get deficit => 'عجز';
+
+  @override
+  String get thisMonth => 'هذا الشهر';
+
+  @override
+  String get incomeVsExpense => 'الدخل مقابل المصروف';
+
+  @override
+  String get refreshingDashboard => 'تحديث لوحة التحكم...';
+
+  @override
+  String get today => 'اليوم';
+
+  @override
+  String get yesterday => 'أمس';
+
+  @override
+  String get startByAddingFirstTransaction => 'ابدأ بإضافة معاملتك الأولى';
+
+  @override
+  String get welcomeToMoneyManager => 'مرحباً بك في مدير الأموال';
 }

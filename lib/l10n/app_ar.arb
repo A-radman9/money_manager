@@ -126,5 +126,16 @@
   "addFirstCategory": "اضغط على زر + لإضافة فئتك الأولى",
   "allTransactions": "جميع المعاملات",
   "optional": "اختياري",
-  "addAnyAdditionalNotes": "أضف أي ملاحظات إضافية"
+  "addAnyAdditionalNotes": "أضف أي ملاحظات إضافية",
+  "positive": "إيجابي",
+  "negative": "سلبي",
+  "surplus": "فائض",
+  "deficit": "عجز",
+  "thisMonth": "هذا الشهر",
+  "incomeVsExpense": "الدخل مقابل المصروف",
+  "refreshingDashboard": "تحديث لوحة التحكم...",
+  "today": "اليوم",
+  "yesterday": "أمس",
+  "startByAddingFirstTransaction": "ابدأ بإضافة معاملتك الأولى",
+  "welcomeToMoneyManager": "مرحباً بك في مدير الأموال"
 }

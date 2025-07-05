@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/date_utils.dart' as date_utils;
+import '../../l10n/app_localizations.dart';
 
 class CustomDatePicker extends StatelessWidget {
   final String label;
@@ -59,7 +60,7 @@ class CustomDatePicker extends StatelessWidget {
                 Expanded(
                   child: Text(
                     selectedDate != null
-                        ? date_utils.DateUtils.formatDisplayDate(selectedDate!)
+                        ? date_utils.DateUtils.formatDisplayDate(selectedDate!, Localizations.localeOf(context).languageCode)
                         : 'Select date',
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: selectedDate != null
@@ -86,6 +87,7 @@ class CustomDatePicker extends StatelessWidget {
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: firstDate ?? DateTime(2000),
       lastDate: lastDate ?? DateTime(2100),
+      locale: Localizations.localeOf(context),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -159,7 +161,7 @@ class DateRangePicker extends StatelessWidget {
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: Text(
-                    _getDateRangeText(),
+                    _getDateRangeText(context),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: (startDate != null && endDate != null)
                           ? (enabled ? null : theme.disabledColor)
@@ -179,9 +181,10 @@ class DateRangePicker extends StatelessWidget {
     );
   }
 
-  String _getDateRangeText() {
+  String _getDateRangeText(BuildContext context) {
     if (startDate != null && endDate != null) {
-      return '${date_utils.DateUtils.formatDisplayDate(startDate!)} - ${date_utils.DateUtils.formatDisplayDate(endDate!)}';
+      final locale = Localizations.localeOf(context).languageCode;
+      return '${date_utils.DateUtils.formatDisplayDate(startDate!, locale)} - ${date_utils.DateUtils.formatDisplayDate(endDate!, locale)}';
     }
     return 'Select date range';
   }
@@ -194,6 +197,7 @@ class DateRangePicker extends StatelessWidget {
       initialDateRange: (startDate != null && endDate != null)
           ? DateTimeRange(start: startDate!, end: endDate!)
           : null,
+      locale: Localizations.localeOf(context),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(

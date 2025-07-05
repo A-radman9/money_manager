@@ -50,7 +50,7 @@ class BalanceOverviewCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4.0),
                     Text(
-                      data.balance >= 0 ? 'Positive' : 'Negative',
+                      data.balance >= 0 ? l10n.positive : l10n.negative,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: data.balance >= 0 ? Colors.green : Colors.red,
                         fontWeight: FontWeight.w600,

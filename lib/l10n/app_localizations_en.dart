@@ -362,4 +362,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addAnyAdditionalNotes => 'Add any additional notes';
+
+  @override
+  String get positive => 'Positive';
+
+  @override
+  String get negative => 'Negative';
+
+  @override
+  String get surplus => 'Surplus';
+
+  @override
+  String get deficit => 'Deficit';
+
+  @override
+  String get thisMonth => 'This Month';
+
+  @override
+  String get incomeVsExpense => 'Income vs Expense';
+
+  @override
+  String get refreshingDashboard => 'Refreshing dashboard...';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get startByAddingFirstTransaction =>
+      'Start by adding your first transaction';
+
+  @override
+  String get welcomeToMoneyManager => 'Welcome to Money Manager';
 }

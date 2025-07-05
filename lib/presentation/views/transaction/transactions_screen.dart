@@ -5,6 +5,7 @@ import '../../view_models/transaction/transaction_state.dart';
 import '../../widgets/loading_and_empty_states.dart';
 import '../../../domain/entities/transaction.dart';
 import '../../../core/utils/date_utils.dart' as date_utils;
+import '../../../l10n/app_localizations.dart';
 import 'edit_transaction_screen.dart';
 
 class TransactionsScreen extends StatefulWidget {
@@ -210,7 +211,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       return transaction.description.toLowerCase().contains(_searchQuery) ||
              transaction.amount.toString().contains(_searchQuery) ||
              (transaction.notes?.toLowerCase().contains(_searchQuery) ?? false) ||
-             date_utils.DateUtils.formatDate(transaction.date).toLowerCase().contains(_searchQuery);
+             date_utils.DateUtils.formatDisplayDate(transaction.date, Localizations.localeOf(context).languageCode).toLowerCase().contains(_searchQuery);
     }).toList();
 
     if (filteredTransactions.isEmpty) {
@@ -346,7 +347,7 @@ class _TransactionListItem extends StatelessWidget {
           children: [
             const SizedBox(height: 4),
             Text(
-              date_utils.DateUtils.formatDate(transaction.date),
+              date_utils.DateUtils.formatDisplayDate(transaction.date, Localizations.localeOf(context).languageCode),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),

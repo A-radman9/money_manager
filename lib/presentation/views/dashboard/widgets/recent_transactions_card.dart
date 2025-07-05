@@ -69,7 +69,7 @@ class RecentTransactionsCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    'Start by adding your first transaction',
+                    l10n.startByAddingFirstTransaction,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.textTheme.bodyMedium?.color?.withOpacity(0.5),
                     ),
@@ -91,6 +91,7 @@ class RecentTransactionsCard extends StatelessWidget {
 
   Widget _buildTransactionItem(BuildContext context, Transaction transaction) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final isIncome = transaction.type == AppConstants.incomeType;
     
     return Container(
@@ -134,7 +135,12 @@ class RecentTransactionsCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2.0),
                 Text(
-                  date_utils.DateUtils.getRelativeDate(transaction.date),
+                  date_utils.DateUtils.getRelativeDate(
+                    transaction.date,
+                    todayText: l10n.today,
+                    yesterdayText: l10n.yesterday,
+                    locale: Localizations.localeOf(context).languageCode,
+                  ),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
                   ),

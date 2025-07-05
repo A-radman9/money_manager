@@ -207,15 +207,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               );
             } else {
-              return const LoadingWidget(message: 'Refreshing dashboard...');
+              return LoadingWidget(message: l10n.refreshingDashboard);
             }
           }
           
-          return const EmptyStateWidget(
+          return EmptyStateWidget(
             icon: Icons.dashboard_outlined,
-            title: 'Welcome to Money Manager',
-            subtitle: 'Start by adding your first transaction',
-            actionText: 'Add Transaction',
+            title: l10n.welcomeToMoneyManager,
+            subtitle: l10n.startByAddingFirstTransaction,
+            actionText: l10n.addTransaction,
           );
         },
       ),
@@ -233,7 +233,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         },
         icon: Icons.add,
-        tooltip: 'Add Transaction',
+        tooltip: l10n.addTransaction,
       ),
     );
   }

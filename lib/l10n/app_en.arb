@@ -126,5 +126,16 @@
   "addFirstCategory": "Tap the + button to add your first category",
   "allTransactions": "All Transactions",
   "optional": "Optional",
-  "addAnyAdditionalNotes": "Add any additional notes"
+  "addAnyAdditionalNotes": "Add any additional notes",
+  "positive": "Positive",
+  "negative": "Negative",
+  "surplus": "Surplus",
+  "deficit": "Deficit",
+  "thisMonth": "This Month",
+  "incomeVsExpense": "Income vs Expense",
+  "refreshingDashboard": "Refreshing dashboard...",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "startByAddingFirstTransaction": "Start by adding your first transaction",
+  "welcomeToMoneyManager": "Welcome to Money Manager"
 }

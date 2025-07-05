@@ -9,6 +9,7 @@ import '../../../domain/entities/category.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/currency_utils.dart';
 import '../../../core/utils/date_utils.dart' as date_utils;
+import '../../../l10n/app_localizations.dart';
 
 class EditTransactionScreen extends StatefulWidget {
   final Transaction transaction;
@@ -392,7 +393,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 const Icon(Icons.calendar_today),
                 const SizedBox(width: 12.0),
                 Text(
-                  date_utils.DateUtils.formatDate(_selectedDate),
+                  date_utils.DateUtils.formatDisplayDate(_selectedDate, Localizations.localeOf(context).languageCode),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const Spacer(),
@@ -488,6 +489,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
       initialDate: _selectedDate,
       firstDate: DateTime(2000),
       lastDate: DateTime.now().add(const Duration(days: 365)),
+      locale: Localizations.localeOf(context),
     );
     if (picked != null && picked != _selectedDate) {
       setState(() {
