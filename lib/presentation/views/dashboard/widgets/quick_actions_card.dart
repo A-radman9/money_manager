@@ -3,6 +3,7 @@ import '../../../widgets/custom_card.dart';
 import '../../transaction/add_transaction_screen.dart';
 import '../../reports/reports_screen.dart';
 import '../../category/categories_screen.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class QuickActionsCard extends StatelessWidget {
   final VoidCallback? onTransactionAdded;
@@ -36,7 +37,9 @@ class QuickActionsCard extends StatelessWidget {
                   () async {
                     final result = await Navigator.of(context).push<bool>(
                       MaterialPageRoute(
-                        builder: (context) => const AddTransactionScreen(),
+                        builder: (context) => const AddTransactionScreen(
+                          initialType: AppConstants.incomeType,
+                        ),
                       ),
                     );
                     if (result == true && onTransactionAdded != null) {
@@ -55,7 +58,9 @@ class QuickActionsCard extends StatelessWidget {
                   () async {
                     final result = await Navigator.of(context).push<bool>(
                       MaterialPageRoute(
-                        builder: (context) => const AddTransactionScreen(),
+                        builder: (context) => const AddTransactionScreen(
+                          initialType: AppConstants.expenseType,
+                        ),
                       ),
                     );
                     if (result == true && onTransactionAdded != null) {

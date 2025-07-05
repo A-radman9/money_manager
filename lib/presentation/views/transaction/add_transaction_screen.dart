@@ -12,7 +12,12 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/currency_utils.dart';
 
 class AddTransactionScreen extends StatefulWidget {
-  const AddTransactionScreen({super.key});
+  final String? initialType;
+
+  const AddTransactionScreen({
+    super.key,
+    this.initialType,
+  });
 
   @override
   State<AddTransactionScreen> createState() => _AddTransactionScreenState();
@@ -24,7 +29,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   final _amountController = TextEditingController();
   final _notesController = TextEditingController();
   
-  String _selectedType = AppConstants.expenseType;
+  late String _selectedType;
   Category? _selectedCategory;
   DateTime _selectedDate = DateTime.now();
   bool _isLoading = false;
@@ -32,6 +37,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedType = widget.initialType ?? AppConstants.expenseType;
     _loadCategories();
   }
 
