@@ -5,6 +5,7 @@ import '../../view_models/transaction/transaction_state.dart';
 import '../../widgets/loading_and_empty_states.dart';
 import '../../../domain/entities/transaction.dart';
 import '../../../core/utils/date_utils.dart' as date_utils;
+import 'edit_transaction_screen.dart';
 
 class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({super.key});
@@ -31,8 +32,33 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: BlocBuilder<TransactionCubit, TransactionState>(
-        builder: (context, state) {
+      body: BlocListener<TransactionCubit, TransactionState>(
+        listener: (context, state) {
+          if (state is TransactionUpdated) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Transaction updated successfully'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (state is TransactionDeleted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Transaction deleted successfully'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (state is TransactionError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<TransactionCubit, TransactionState>(
+          builder: (context, state) {
           if (state is TransactionLoading) {
             return const LoadingWidget();
           }
@@ -113,9 +139,8 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   final transaction = state.transactions[index];
                   return _TransactionListItem(
                     transaction: transaction,
-                    onTap: () {
-                      // TODO: Navigate to transaction details or edit
-                    },
+                    onTap: () => _navigateToEditTransaction(transaction),
+                    onDelete: () => _showDeleteDialog(transaction),
                   );
                 },
               ),
@@ -123,8 +148,43 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           }
           
           return const SizedBox.shrink();
-        },
+          },
+        ),
       ),
+    );
+  }
+
+  void _navigateToEditTransaction(Transaction transaction) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditTransactionScreen(transaction: transaction),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(Transaction transaction) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Transaction'),
+          content: Text('Are you sure you want to delete "${transaction.description}"?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                context.read<TransactionCubit>().deleteTransaction(transaction.id!);
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -132,10 +192,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 class _TransactionListItem extends StatelessWidget {
   final Transaction transaction;
   final VoidCallback? onTap;
-  
+  final VoidCallback? onDelete;
+
   const _TransactionListItem({
     required this.transaction,
     this.onTap,
+    this.onDelete,
   });
 
   @override
@@ -186,12 +248,56 @@ class _TransactionListItem extends StatelessWidget {
             ],
           ],
         ),
-        trailing: Text(
-          '${isIncome ? '+' : '-'}\$${transaction.amount.toStringAsFixed(2)}',
-          style: theme.textTheme.titleMedium?.copyWith(
-            color: isIncome ? Colors.green : Colors.red,
-            fontWeight: FontWeight.bold,
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '${isIncome ? '+' : '-'}\$${transaction.amount.toStringAsFixed(2)}',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: isIncome ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 8),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'edit') {
+                  onTap?.call();
+                } else if (value == 'delete') {
+                  onDelete?.call();
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                const PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      Icon(Icons.edit, size: 20),
+                      SizedBox(width: 8),
+                      Text('Edit'),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete, size: 20, color: Colors.red),
+                      SizedBox(width: 8),
+                      Text('Delete', style: TextStyle(color: Colors.red)),
+                    ],
+                  ),
+                ),
+              ],
+              child: const Icon(Icons.more_vert),
+            ),
+          ],
         ),
       ),
     );
