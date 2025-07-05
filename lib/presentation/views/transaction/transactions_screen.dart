@@ -15,10 +15,24 @@ class TransactionsScreen extends StatefulWidget {
 }
 
 class _TransactionsScreenState extends State<TransactionsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
   @override
   void initState() {
     super.initState();
     context.read<TransactionCubit>().loadTransactions();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text.toLowerCase();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,34 +45,76 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         backgroundColor: theme.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              context.read<TransactionCubit>().loadTransactions();
+            },
+          ),
+        ],
       ),
-      body: BlocListener<TransactionCubit, TransactionState>(
-        listener: (context, state) {
-          if (state is TransactionUpdated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Transaction updated successfully'),
-                backgroundColor: Colors.green,
+      body: Column(
+        children: [
+          // Search Field
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            color: theme.primaryColor.withOpacity(0.1),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search transactions...',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                      },
+                    )
+                  : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
               ),
-            );
-          } else if (state is TransactionDeleted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Transaction deleted successfully'),
-                backgroundColor: Colors.green,
-              ),
-            );
-          } else if (state is TransactionError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
-        child: BlocBuilder<TransactionCubit, TransactionState>(
-          builder: (context, state) {
+            ),
+          ),
+          // Transactions List
+          Expanded(
+            child: BlocListener<TransactionCubit, TransactionState>(
+              listener: (context, state) {
+                if (state is TransactionUpdated) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Transaction updated successfully'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else if (state is TransactionDeleted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Transaction deleted successfully'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else if (state is TransactionError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: BlocBuilder<TransactionCubit, TransactionState>(
+                builder: (context, state) {
           if (state is TransactionLoading) {
             return const LoadingWidget();
           }
@@ -132,25 +188,86 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
               onRefresh: () async {
                 context.read<TransactionCubit>().loadTransactions();
               },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: state.transactions.length,
-                itemBuilder: (context, index) {
-                  final transaction = state.transactions[index];
-                  return _TransactionListItem(
-                    transaction: transaction,
-                    onTap: () => _navigateToEditTransaction(transaction),
-                    onDelete: () => _showDeleteDialog(transaction),
-                  );
-                },
-              ),
+              child: _buildFilteredTransactionsList(state.transactions),
             );
           }
-          
+
           return const SizedBox.shrink();
-          },
-        ),
+                },
+              ),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildFilteredTransactionsList(List<Transaction> transactions) {
+    // Filter transactions based on search query
+    final filteredTransactions = transactions.where((transaction) {
+      if (_searchQuery.isEmpty) return true;
+
+      return transaction.description.toLowerCase().contains(_searchQuery) ||
+             transaction.amount.toString().contains(_searchQuery) ||
+             (transaction.notes?.toLowerCase().contains(_searchQuery) ?? false) ||
+             date_utils.DateUtils.formatDate(transaction.date).toLowerCase().contains(_searchQuery);
+    }).toList();
+
+    if (filteredTransactions.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _searchQuery.isNotEmpty ? Icons.search_off : Icons.receipt_long,
+              size: 64,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              _searchQuery.isNotEmpty
+                ? 'No transactions found for "$_searchQuery"'
+                : 'No transactions yet',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              _searchQuery.isNotEmpty
+                ? 'Try adjusting your search terms'
+                : 'Add your first transaction to get started',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (_searchQuery.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  _searchController.clear();
+                },
+                child: const Text('Clear Search'),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: filteredTransactions.length,
+      itemBuilder: (context, index) {
+        final transaction = filteredTransactions[index];
+        return _TransactionListItem(
+          transaction: transaction,
+          onTap: () => _navigateToEditTransaction(transaction),
+          onDelete: () => _showDeleteDialog(transaction),
+        );
+      },
     );
   }
 
