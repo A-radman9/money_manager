@@ -1,0 +1,274 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Arabic (`ar`).
+class AppLocalizationsAr extends AppLocalizations {
+  AppLocalizationsAr([String locale = 'ar']) : super(locale);
+
+  @override
+  String get appTitle => 'مدير الأموال';
+
+  @override
+  String get dashboard => 'لوحة التحكم';
+
+  @override
+  String get transactions => 'المعاملات';
+
+  @override
+  String get reports => 'التقارير';
+
+  @override
+  String get categories => 'الفئات';
+
+  @override
+  String get settings => 'الإعدادات';
+
+  @override
+  String get addIncome => 'إضافة دخل';
+
+  @override
+  String get addExpense => 'إضافة مصروف';
+
+  @override
+  String get addTransaction => 'إضافة معاملة';
+
+  @override
+  String get editTransaction => 'تعديل المعاملة';
+
+  @override
+  String get deleteTransaction => 'حذف المعاملة';
+
+  @override
+  String get income => 'دخل';
+
+  @override
+  String get expense => 'مصروف';
+
+  @override
+  String get amount => 'المبلغ';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get category => 'الفئة';
+
+  @override
+  String get date => 'التاريخ';
+
+  @override
+  String get notes => 'ملاحظات';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get update => 'تحديث';
+
+  @override
+  String get add => 'إضافة';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get searchTransactions => 'البحث في المعاملات...';
+
+  @override
+  String get noTransactionsFound => 'لم يتم العثور على معاملات';
+
+  @override
+  String get noTransactionsYet => 'لا توجد معاملات بعد';
+
+  @override
+  String get addFirstTransaction => 'أضف معاملتك الأولى للبدء';
+
+  @override
+  String get tryAdjustingSearch => 'حاول تعديل مصطلحات البحث';
+
+  @override
+  String get clearSearch => 'مسح البحث';
+
+  @override
+  String get totalBalance => 'الرصيد الإجمالي';
+
+  @override
+  String get totalIncome => 'إجمالي الدخل';
+
+  @override
+  String get totalExpenses => 'إجمالي المصروفات';
+
+  @override
+  String get recentTransactions => 'المعاملات الأخيرة';
+
+  @override
+  String get quickActions => 'الإجراءات السريعة';
+
+  @override
+  String get viewAll => 'عرض الكل';
+
+  @override
+  String get financialReports => 'التقارير المالية';
+
+  @override
+  String get overview => 'نظرة عامة';
+
+  @override
+  String get trends => 'الاتجاهات';
+
+  @override
+  String get incomeVsExpenses => 'الدخل مقابل المصروفات';
+
+  @override
+  String get dailyTrends => 'الاتجاهات اليومية';
+
+  @override
+  String get expensesByCategory => 'المصروفات حسب الفئة';
+
+  @override
+  String get last7Days => 'آخر 7 أيام';
+
+  @override
+  String get noDataAvailable => 'لا توجد بيانات متاحة';
+
+  @override
+  String get addCategoryFirst => 'أضف بعض المعاملات لرؤية التقارير';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get selectLanguage => 'اختر اللغة';
+
+  @override
+  String get transactionType => 'نوع المعاملة';
+
+  @override
+  String get selectCategory => 'اختر الفئة';
+
+  @override
+  String get pleaseSelectCategory => 'يرجى اختيار فئة';
+
+  @override
+  String get enterDescription => 'أدخل الوصف';
+
+  @override
+  String get enterAmount => 'أدخل المبلغ';
+
+  @override
+  String get pleaseEnterDescription => 'يرجى إدخال وصف';
+
+  @override
+  String get pleaseEnterAmount => 'يرجى إدخال مبلغ';
+
+  @override
+  String get pleaseEnterValidAmount => 'يرجى إدخال مبلغ صحيح أكبر من 0';
+
+  @override
+  String get transactionAddedSuccessfully => 'تم إضافة المعاملة بنجاح';
+
+  @override
+  String get transactionUpdatedSuccessfully => 'تم تحديث المعاملة بنجاح';
+
+  @override
+  String get transactionDeletedSuccessfully => 'تم حذف المعاملة بنجاح';
+
+  @override
+  String get categoryAddedSuccessfully => 'تم إضافة الفئة بنجاح';
+
+  @override
+  String get categoryUpdatedSuccessfully => 'تم تحديث الفئة بنجاح';
+
+  @override
+  String get categoryDeletedSuccessfully => 'تم حذف الفئة بنجاح';
+
+  @override
+  String get errorLoadingData => 'خطأ في تحميل البيانات';
+
+  @override
+  String get errorLoadingTransactions => 'خطأ في تحميل المعاملات';
+
+  @override
+  String get errorLoadingCategories => 'خطأ في تحميل الفئات';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get areYouSure => 'هل أنت متأكد؟';
+
+  @override
+  String get deleteTransactionConfirm => 'هل أنت متأكد من حذف هذه المعاملة؟';
+
+  @override
+  String get deleteCategoryConfirm => 'هل أنت متأكد من حذف هذه الفئة؟';
+
+  @override
+  String get categoryName => 'اسم الفئة';
+
+  @override
+  String get enterCategoryName => 'أدخل اسم الفئة';
+
+  @override
+  String get pleaseEnterCategoryName => 'يرجى إدخال اسم الفئة';
+
+  @override
+  String get categoryNameTooShort => 'يجب أن يكون اسم الفئة على الأقل حرفين';
+
+  @override
+  String get selectIcon => 'اختر الأيقونة';
+
+  @override
+  String get selectColor => 'اختر اللون';
+
+  @override
+  String get addCategory => 'إضافة فئة';
+
+  @override
+  String get editCategory => 'تعديل الفئة';
+
+  @override
+  String get updateCategory => 'تحديث الفئة';
+
+  @override
+  String get deleteCategory => 'حذف الفئة';
+
+  @override
+  String get defaultCategory => 'فئة افتراضية';
+
+  @override
+  String get customCategory => 'فئة مخصصة';
+
+  @override
+  String get noCategoriesYet => 'لا توجد فئات بعد';
+
+  @override
+  String get addFirstCategory => 'اضغط على زر + لإضافة فئتك الأولى';
+
+  @override
+  String get allTransactions => 'جميع المعاملات';
+
+  @override
+  String get optional => 'اختياري';
+
+  @override
+  String get addAnyAdditionalNotes => 'أضف أي ملاحظات إضافية';
+}

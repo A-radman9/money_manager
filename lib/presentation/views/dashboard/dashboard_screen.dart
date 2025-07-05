@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../view_models/dashboard/dashboard_cubit.dart';
 import '../../view_models/dashboard/dashboard_state.dart';
 import '../../widgets/custom_button.dart';
@@ -10,6 +11,7 @@ import '../transaction/transactions_screen.dart';
 import 'widgets/balance_overview_card.dart';
 import 'widgets/quick_actions_card.dart';
 import 'widgets/recent_transactions_card.dart';
+import '../settings/settings_screen.dart';
 import 'widgets/monthly_summary_card.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -33,12 +35,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+    // final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          AppConstants.appName,
+          AppConstants.appName, // l10n.appTitle,
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -55,7 +58,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             onPressed: () {
-              // TODO: Navigate to settings
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
             },
           ),
         ],

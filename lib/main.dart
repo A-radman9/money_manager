@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'core/constants/app_constants.dart';
 import 'data/datasources/database_helper.dart';
 import 'data/datasources/transaction_dao.dart';
@@ -12,6 +14,8 @@ import 'presentation/view_models/dashboard/dashboard_cubit.dart';
 import 'presentation/view_models/transaction/transaction_cubit.dart';
 import 'presentation/view_models/category/category_cubit.dart';
 import 'presentation/view_models/account/account_cubit.dart';
+import 'presentation/view_models/settings/settings_cubit.dart';
+import 'presentation/view_models/settings/settings_state.dart';
 import 'presentation/views/dashboard/dashboard_screen.dart';
 
 void main() async {
@@ -80,20 +84,47 @@ class MoneyManagerApp extends StatelessWidget {
               accountRepository: context.read<AccountRepositoryImpl>(),
             ),
           ),
+          BlocProvider<SettingsCubit>(
+            create: (context) => SettingsCubit(),
+          ),
         ],
-        child: MaterialApp(
-          title: AppConstants.appName,
-          debugShowCheckedModeBanner: false,
-          theme: _buildTheme(),
-          home: const DashboardScreen(),
+        child: BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, settingsState) {
+            return MaterialApp(
+              title: AppConstants.appName,
+              debugShowCheckedModeBanner: false,
+              theme: _buildTheme(settingsState),
+              // locale: context.read<SettingsCubit>().currentLocale,
+              // localizationsDelegates: const [
+              //   AppLocalizations.delegate,
+              //   GlobalMaterialLocalizations.delegate,
+              //   GlobalWidgetsLocalizations.delegate,
+              //   GlobalCupertinoLocalizations.delegate,
+              // ],
+              // supportedLocales: const [
+              //   Locale('en'),
+              //   Locale('ar'),
+              // ],
+              home: const DashboardScreen(),
+            );
+          },
         ),
       ),
     );
   }
 
-  ThemeData _buildTheme() {
+  ThemeData _buildTheme(SettingsState settingsState) {
+    // Determine font family based on locale
+    String fontFamily = 'Nunito'; // Default for English
+    if (settingsState is SettingsLoaded && settingsState.locale.languageCode == 'ar') {
+      fontFamily = 'Almarai';
+    } else if (settingsState is SettingsLanguageChanged && settingsState.locale.languageCode == 'ar') {
+      fontFamily = 'Almarai';
+    }
+
     return ThemeData(
       useMaterial3: true,
+      fontFamily: fontFamily,
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF2E7D32), // Green theme for money app
         brightness: Brightness.light,
