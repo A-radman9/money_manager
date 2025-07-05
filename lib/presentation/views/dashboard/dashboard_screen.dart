@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../view_models/dashboard/dashboard_cubit.dart';
 import '../../view_models/dashboard/dashboard_state.dart';
 import '../../widgets/custom_button.dart';
@@ -35,13 +35,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          AppConstants.appName, // l10n.appTitle,
+          l10n.appTitle,
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
           ),

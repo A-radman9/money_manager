@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../view_models/settings/settings_cubit.dart';
 import '../../view_models/settings/settings_state.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -10,11 +10,11 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'), // l10n.settings
+        title: Text(l10n.settings),
         backgroundColor: theme.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -40,7 +40,7 @@ class SettingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Language', // l10n.language
+                        l10n.language,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                       _buildLanguageOption(
                         context,
                         'en',
-                        'English', // l10n.english
+                        l10n.english,
                         Icons.language,
                         currentLanguage == 'en',
                       ),
@@ -57,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
                       _buildLanguageOption(
                         context,
                         'ar',
-                        'العربية', // l10n.arabic
+                        l10n.arabic,
                         Icons.language,
                         currentLanguage == 'ar',
                       ),
