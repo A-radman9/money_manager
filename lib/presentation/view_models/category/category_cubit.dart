@@ -51,6 +51,7 @@ class CategoryCubit extends Cubit<CategoryState> {
 
   Future<void> addCategory({
     required String name,
+    String? nameAr,
     required String icon,
     required int color,
     required String type,
@@ -72,6 +73,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     final now = DateTime.now();
     final category = Category(
       name: name,
+      nameAr: nameAr,
       icon: icon,
       color: color,
       type: type,
@@ -93,6 +95,7 @@ class CategoryCubit extends Cubit<CategoryState> {
   Future<void> updateCategory({
     required String id,
     required String name,
+    String? nameAr,
     required String icon,
     required int color,
     required String type,
@@ -104,6 +107,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     final category = Category(
       id: id,
       name: name,
+      nameAr: nameAr,
       icon: icon,
       color: color,
       type: type,

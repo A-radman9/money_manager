@@ -4,6 +4,7 @@ class CategoryModel extends Category {
   const CategoryModel({
     super.id,
     required super.name,
+    super.nameAr,
     required super.icon,
     required super.color,
     required super.type,
@@ -16,6 +17,7 @@ class CategoryModel extends Category {
     return CategoryModel(
       id: json['id']?.toString(),
       name: json['name'] as String,
+      nameAr: json['name_ar'] as String?,
       icon: json['icon'] as String,
       color: json['color'] as int,
       type: json['type'] as String,
@@ -29,6 +31,7 @@ class CategoryModel extends Category {
     return {
       'id': id,
       'name': name,
+      'name_ar': nameAr,
       'icon': icon,
       'color': color,
       'type': type,
@@ -50,6 +53,7 @@ class CategoryModel extends Category {
     return CategoryModel(
       id: category.id,
       name: category.name,
+      nameAr: category.nameAr,
       icon: category.icon,
       color: category.color,
       type: category.type,
@@ -63,6 +67,7 @@ class CategoryModel extends Category {
   CategoryModel copyWith({
     String? id,
     String? name,
+    String? nameAr,
     String? icon,
     int? color,
     String? type,
@@ -73,6 +78,7 @@ class CategoryModel extends Category {
     return CategoryModel(
       id: id ?? this.id,
       name: name ?? this.name,
+      nameAr: nameAr ?? this.nameAr,
       icon: icon ?? this.icon,
       color: color ?? this.color,
       type: type ?? this.type,

@@ -240,6 +240,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Category name must be at least 2 characters';
 
   @override
+  String get enterCategoryNameArabic => 'Enter category name in Arabic';
+
+  @override
   String get selectIcon => 'Select Icon';
 
   @override
@@ -255,6 +258,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateCategory => 'Update Category';
 
   @override
+  String get noCategoriesYet => 'No categories yet';
+
+  @override
+  String get addFirstCategory => 'Tap the + button to add your first category';
+
+  @override
   String get deleteCategory => 'Delete Category';
 
   @override
@@ -262,12 +271,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customCategory => 'Custom category';
-
-  @override
-  String get noCategoriesYet => 'No categories yet';
-
-  @override
-  String get addFirstCategory => 'Tap the + button to add your first category';
 
   @override
   String get allTransactions => 'All Transactions';

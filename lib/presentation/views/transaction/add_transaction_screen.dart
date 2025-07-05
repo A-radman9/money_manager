@@ -10,6 +10,7 @@ import '../../widgets/custom_button.dart';
 import '../../../domain/entities/category.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/currency_utils.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   final String? initialType;
@@ -56,10 +57,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Transaction'),
+        title: Text(l10n.addTransaction),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -98,19 +100,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Transaction Type Selector
-                _buildTypeSelector(),
+                _buildTypeSelector(l10n),
                 const SizedBox(height: 24.0),
                 
                 // Amount Input
                 AmountInputField(
-                  label: 'Amount',
+                  label: l10n.amount,
                   controller: _amountController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter an amount';
+                      return l10n.pleaseEnterAmount;
                     }
                     if (!CurrencyUtils.isValidAmount(value)) {
-                      return 'Please enter a valid amount';
+                      return l10n.pleaseEnterValidAmount;
                     }
                     return null;
                   },
@@ -119,12 +121,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 
                 // Description Input
                 CustomInputField(
-                  label: 'Description',
+                  label: l10n.description,
                   controller: _descriptionController,
-                  hint: 'Enter transaction description',
+                  hint: l10n.enterDescription,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a description';
+                      return l10n.pleaseEnterDescription;
                     }
                     return null;
                   },
@@ -132,12 +134,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 const SizedBox(height: 16.0),
                 
                 // Category Selection
-                _buildCategorySelector(),
+                _buildCategorySelector(l10n),
                 const SizedBox(height: 16.0),
                 
                 // Date Picker
                 CustomDatePicker(
-                  label: 'Date',
+                  label: l10n.date,
                   selectedDate: _selectedDate,
                   onDateSelected: (date) {
                     setState(() {
@@ -149,9 +151,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 
                 // Notes Input
                 CustomInputField(
-                  label: 'Notes (Optional)',
+                  label: '${l10n.notes} (${l10n.optional})',
                   controller: _notesController,
-                  hint: 'Add any additional notes',
+                  hint: l10n.addAnyAdditionalNotes,
                   maxLines: 3,
                 ),
                 const SizedBox(height: 32.0),
@@ -160,11 +162,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: CustomButton(
-                    text: 'Save Transaction',
+                    text: l10n.save,
                     onPressed: _isLoading ? null : _saveTransaction,
                     isLoading: _isLoading,
-                    backgroundColor: _selectedType == AppConstants.incomeType 
-                        ? Colors.green 
+                    backgroundColor: _selectedType == AppConstants.incomeType
+                        ? Colors.green
                         : Colors.red,
                   ),
                 ),
@@ -176,12 +178,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     );
   }
 
-  Widget _buildTypeSelector() {
+  Widget _buildTypeSelector(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Transaction Type',
+          l10n.transactionType,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -192,7 +194,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Expanded(
               child: _buildTypeOption(
                 AppConstants.expenseType,
-                'Expense',
+                l10n.expense,
                 Icons.remove_circle_outline,
                 Colors.red,
               ),
@@ -201,7 +203,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             Expanded(
               child: _buildTypeOption(
                 AppConstants.incomeType,
-                'Income',
+                l10n.income,
                 Icons.add_circle_outline,
                 Colors.green,
               ),
@@ -256,12 +258,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     );
   }
 
-  Widget _buildCategorySelector() {
+  Widget _buildCategorySelector(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Category',
+          l10n.category,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -284,7 +286,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Text(
-                  'Error loading categories: ${state.message}',
+                  '${l10n.errorLoadingCategories}: ${state.message}',
                   style: const TextStyle(color: Colors.red),
                 ),
               );
@@ -317,7 +319,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                   runSpacing: 8.0,
                   children: categories.map((category) {
                     final isSelected = _selectedCategory?.id == category.id;
-                    return _buildCategoryChip(category, isSelected);
+                    return _buildCategoryChip(category, isSelected, l10n);
                   }).toList(),
                 ),
               );
@@ -330,7 +332,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              'Please select a category',
+              l10n.pleaseSelectCategory,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Colors.red,
               ),
@@ -340,7 +342,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     );
   }
 
-  Widget _buildCategoryChip(Category category, bool isSelected) {
+  Widget _buildCategoryChip(Category category, bool isSelected, AppLocalizations l10n) {
     final color = Color(category.color);
     
     return InkWell(
@@ -370,7 +372,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             const SizedBox(width: 6.0),
             Text(
-              category.name,
+              category.getLocalizedName(l10n.localeName),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: color,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -404,14 +406,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
   void _saveTransaction() {
+    final l10n = AppLocalizations.of(context)!;
+
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    
+
     if (_selectedCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a category'),
+        SnackBar(
+          content: Text(l10n.pleaseSelectCategory),
           backgroundColor: Colors.red,
         ),
       );

@@ -234,6 +234,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get categoryNameTooShort => 'يجب أن يكون اسم الفئة على الأقل حرفين';
 
   @override
+  String get enterCategoryNameArabic => 'أدخل اسم الفئة بالعربية';
+
+  @override
   String get selectIcon => 'اختر الأيقونة';
 
   @override
@@ -249,6 +252,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get updateCategory => 'تحديث الفئة';
 
   @override
+  String get noCategoriesYet => 'لا توجد فئات بعد';
+
+  @override
+  String get addFirstCategory => 'اضغط على زر + لإضافة فئتك الأولى';
+
+  @override
   String get deleteCategory => 'حذف الفئة';
 
   @override
@@ -256,12 +265,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get customCategory => 'فئة مخصصة';
-
-  @override
-  String get noCategoriesYet => 'لا توجد فئات بعد';
-
-  @override
-  String get addFirstCategory => 'اضغط على زر + لإضافة فئتك الأولى';
 
   @override
   String get allTransactions => 'جميع المعاملات';

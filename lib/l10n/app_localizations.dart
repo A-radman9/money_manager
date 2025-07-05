@@ -548,6 +548,12 @@ abstract class AppLocalizations {
   /// **'Category name must be at least 2 characters'**
   String get categoryNameTooShort;
 
+  /// No description provided for @enterCategoryNameArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter category name in Arabic'**
+  String get enterCategoryNameArabic;
+
   /// No description provided for @selectIcon.
   ///
   /// In en, this message translates to:
@@ -578,6 +584,18 @@ abstract class AppLocalizations {
   /// **'Update Category'**
   String get updateCategory;
 
+  /// No description provided for @noCategoriesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories yet'**
+  String get noCategoriesYet;
+
+  /// No description provided for @addFirstCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button to add your first category'**
+  String get addFirstCategory;
+
   /// No description provided for @deleteCategory.
   ///
   /// In en, this message translates to:
@@ -595,18 +613,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom category'**
   String get customCategory;
-
-  /// No description provided for @noCategoriesYet.
-  ///
-  /// In en, this message translates to:
-  /// **'No categories yet'**
-  String get noCategoriesYet;
-
-  /// No description provided for @addFirstCategory.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap the + button to add your first category'**
-  String get addFirstCategory;
 
   /// No description provided for @allTransactions.
   ///

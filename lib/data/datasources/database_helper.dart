@@ -36,6 +36,7 @@ class DatabaseHelper {
       CREATE TABLE ${AppConstants.categoriesTable} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
+        name_ar TEXT,
         icon TEXT NOT NULL,
         color INTEGER NOT NULL,
         type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
@@ -93,8 +94,13 @@ class DatabaseHelper {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     // Handle database upgrades here
-    // For now, we'll just recreate the database
-    if (oldVersion < newVersion) {
+    if (oldVersion < 2 && newVersion >= 2) {
+      // Add name_ar column to categories table
+      await db.execute('ALTER TABLE ${AppConstants.categoriesTable} ADD COLUMN name_ar TEXT');
+    }
+
+    // For any other major changes, recreate the database
+    if (oldVersion < newVersion && newVersion > 2) {
       await db.execute('DROP TABLE IF EXISTS ${AppConstants.transactionsTable}');
       await db.execute('DROP TABLE IF EXISTS ${AppConstants.categoriesTable}');
       await db.execute('DROP TABLE IF EXISTS ${AppConstants.accountsTable}');
@@ -109,6 +115,7 @@ class DatabaseHelper {
     for (final category in AppConstants.defaultIncomeCategories) {
       await db.insert(AppConstants.categoriesTable, {
         'name': category['name'],
+        'name_ar': category['nameAr'],
         'icon': category['icon'],
         'color': category['color'],
         'type': AppConstants.incomeType,
@@ -122,6 +129,7 @@ class DatabaseHelper {
     for (final category in AppConstants.defaultExpenseCategories) {
       await db.insert(AppConstants.categoriesTable, {
         'name': category['name'],
+        'name_ar': category['nameAr'],
         'icon': category['icon'],
         'color': category['color'],
         'type': AppConstants.expenseType,

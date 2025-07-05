@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../view_models/category/category_cubit.dart';
 import '../../view_models/category/category_state.dart';
 import '../../../domain/entities/category.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AddEditCategoryScreen extends StatefulWidget {
   final Category? category;
@@ -21,6 +22,7 @@ class AddEditCategoryScreen extends StatefulWidget {
 class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _nameArController = TextEditingController();
   
   String _selectedIcon = 'category';
   int _selectedColor = Colors.blue.value;
@@ -61,6 +63,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
     super.initState();
     if (widget.category != null) {
       _nameController.text = widget.category!.name;
+      _nameArController.text = widget.category!.nameAr ?? '';
       _selectedIcon = widget.category!.icon;
       _selectedColor = widget.category!.color;
     }
@@ -69,17 +72,19 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _nameArController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final isEditing = widget.category != null;
     
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Category' : 'Add Category'),
+        title: Text(isEditing ? l10n.editCategory : l10n.addCategory),
         backgroundColor: theme.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -119,7 +124,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
               children: [
                 // Category Name
                 Text(
-                  'Category Name',
+                  l10n.categoryName,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -128,7 +133,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    hintText: 'Enter category name',
+                    hintText: l10n.enterCategoryName,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -139,20 +144,52 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a category name';
+                      return l10n.pleaseEnterCategoryName;
                     }
                     if (value.trim().length < 2) {
-                      return 'Category name must be at least 2 characters';
+                      return l10n.categoryNameTooShort;
                     }
                     return null;
                   },
                 ),
-                
+
+                const SizedBox(height: 16),
+
+                // Arabic Category Name
+                Text(
+                  '${l10n.categoryName} (${l10n.arabic})',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _nameArController,
+                  decoration: InputDecoration(
+                    hintText: l10n.enterCategoryNameArabic,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    prefixIcon: Icon(
+                      _getSelectedIconData(),
+                      color: Color(_selectedColor),
+                    ),
+                  ),
+                  textDirection: TextDirection.rtl,
+                  validator: (value) {
+                    // Arabic name is optional, but if provided should be at least 2 characters
+                    if (value != null && value.trim().isNotEmpty && value.trim().length < 2) {
+                      return l10n.categoryNameTooShort;
+                    }
+                    return null;
+                  },
+                ),
+
                 const SizedBox(height: 24),
-                
+
                 // Icon Selection
                 Text(
-                  'Select Icon',
+                  l10n.selectIcon,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -223,7 +260,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                 
                 // Color Selection
                 Text(
-                  'Select Color',
+                  l10n.selectColor,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -295,7 +332,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                           ),
                         )
                       : Text(
-                          isEditing ? 'Update Category' : 'Add Category',
+                          isEditing ? l10n.updateCategory : l10n.addCategory,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -325,12 +362,14 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
     }
 
     final name = _nameController.text.trim();
-    
+    final nameAr = _nameArController.text.trim().isEmpty ? null : _nameArController.text.trim();
+
     if (widget.category != null) {
       // Update existing category
       context.read<CategoryCubit>().updateCategory(
         id: widget.category!.id!,
         name: name,
+        nameAr: nameAr,
         icon: _selectedIcon,
         color: _selectedColor,
         type: widget.categoryType,
@@ -341,6 +380,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
       // Add new category
       context.read<CategoryCubit>().addCategory(
         name: name,
+        nameAr: nameAr,
         icon: _selectedIcon,
         color: _selectedColor,
         type: widget.categoryType,
