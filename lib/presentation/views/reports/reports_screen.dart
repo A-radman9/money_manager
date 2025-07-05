@@ -104,12 +104,12 @@ class _ReportsScreenState extends State<ReportsScreen> with TickerProviderStateM
                 ),
                 TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     setState(() {
                       _selectedYear = tempYear;
                       _selectedMonth = tempMonth;
                       _isFilterActive = tempYear != null || tempMonth != null;
                     });
-                    Navigator.of(context).pop();
                   },
                   child: Text(l10n.apply),
                 ),
