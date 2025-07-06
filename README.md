@@ -20,6 +20,9 @@ This app helps you track your income and expenses with an easy-to-use interface.
 
 ## Screenshots | لقطات الشاشة
 
+### Settings | الإعدادات
+<img src="app_photos/settings_screen.jpg" width="300">
+
 ### Dashboard | لوحة التحكم
 <img src="app_photos/dashboard_screen_english.jpg" width="300"> <img src="app_photos/dashboard_screen_arabic.jpg" width="300">
 
