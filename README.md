@@ -28,15 +28,19 @@ This app helps you track your income and expenses with an easy-to-use interface.
 
 ### Add Income/Expense | إضافة دخل/مصروف
 <img src="app_photos/income_screen_english.jpg" width="300"> <img src="app_photos/expense_screen_english.jpg" width="300">
+<img src="app_photos/income_screen_arabic.jpg" width="300"> <img src="app_photos/expense_screen_arabic.jpg" width="300">
 
 ### Categories | الفئات
 <img src="app_photos/income_categories_screen_englsih.jpg" width="300"> <img src="app_photos/expense_categories_screen_english.jpg" width="300">
+<img src="app_photos/income_categories_screen_arabic.jpg" width="300"> <img src="app_photos/expense_categories_screen_arabic.jpg" width="300">
 
 ### Reports | التقارير
 <img src="app_photos/financial_reports_screen1_english.jpg" width="300"> <img src="app_photos/financial_reports_screen2_english.jpg" width="300">
+<img src="app_photos/financial_reports_screen1_arabic.jpg" width="300"> <img src="app_photos/financial_reports_screen2_arabic.jpg" width="300">
 
 ### All Transactions | جميع المعاملات
 <img src="app_photos/all_transaction_screen_english.jpg" width="300"> <img src="app_photos/all_transaction_filter_screen_english.jpg" width="300">
+<img src="app_photos/all_transaction_screen_arabic.jpg" width="300"> <img src="app_photos/all_transaction_filter_screen_arabic.jpg" width="300">
 
 ## Getting Started | البدء
 
